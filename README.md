@@ -67,23 +67,34 @@ Filename rules:
   title a print.
 - Supported: `.jpg` `.jpeg` `.png` `.webp` `.avif`
 
-A category filter only appears once that category has at least one photo. Until
-any photos exist, the gallery shows reserved brass frames instead.
+Each category becomes a **chapter** down the page: a named opener followed by
+that category's photographs laid edge to edge in rows of varying height and
+width. A category with no photographs in it is skipped entirely — nothing
+renders as an empty section. Until any photos exist at all, the page falls back
+to reserved brass frames.
 
 ### Hero and portrait
 
 ```
-public/images/hero.jpg      # full-bleed photograph under the masthead
+public/images/hero.jpg      # the full-screen opening frame
 public/images/about.jpg     # portrait of Elish in the About section
 ```
 
-Both are optional. The hero is worth adding first — it is the frame the aperture
-opens onto.
+Both are optional, and they behave differently when missing:
+
+- **Hero** — falls back to a photograph from the gallery. Which one is set by
+  `HERO_PICK` at the top of `scripts/scan-media.mjs`; change that path fragment
+  to open on a different frame, or drop a file at `public/images/hero.jpg` to
+  override it outright.
+- **About portrait** — never borrowed. That image is captioned as Elish, so
+  until a real portrait exists the section shows a photograph from the work
+  under its own title instead.
 
 > **Restart `npm run dev`** (or rebuild) after adding files. `scripts/scan-media.mjs`
 > runs automatically as a `predev` / `prebuild` step, scans `public/`, and writes
-> `src/lib/media-manifest.json`. Dimensions come from each file's header, so the
-> gallery lays out at true aspect ratios with no cropping and no layout shift.
+> `src/lib/media-manifest.json`. Dimensions are read with sharp — including the
+> EXIF orientation tag, so a portrait-orientation file lays out as a portrait —
+> which keeps true aspect ratios with no layout shift.
 >
 > `npm run scan:media` re-runs the scan on its own if you want to see what it
 > picked up without a full build.
@@ -122,14 +133,15 @@ that point.
 src/
   app/
     layout.tsx        fonts, metadata, header + footer
-    page.tsx          reads /public, renders the five sections
+    page.tsx          assembles the chapters and written sections
     actions.ts        booking Server Action
     globals.css       design tokens, base styles, keyframes
     icon.svg          favicon (the aperture mark)
   components/
     brand/            aperture mark, divider, logo, placeholder plate
+    gallery/          chapters, the mosaic layout, the shared lightbox
     motion/           scroll reveal + clip reveal wrappers
-    sections/         hero, about, rate card, gallery, contact
+    sections/         hero, about, rate card, contact
     ui/               shadcn/ui primitives, restyled
   lib/
     site.ts               client details, services, categories  ← edit this
@@ -162,8 +174,16 @@ tradition as the wordmark. Utility face is **Jost**, a geometric sans that sets
 well in the wide-tracked capitals of the logo's "PHOTOGRAPHY" line. Brass is
 reserved for accents, rules and hovers; it is never a background.
 
-The signature element is the aperture. It opens across the hero on load, marks
-every section divider, and stands in as the logo mark.
+The whole page is the gallery. It opens on a full-screen photograph, lists the
+categories, then runs each chapter edge to edge — no gutters, no container, row
+heights and column spans varying so no two rows repeat. Written sections sit
+*between* chapters rather than after them, so the page never stops being a
+gallery. Within a row the widest cell takes the widest photograph, which drops
+portrait-orientation frames into the narrow columns where they belong; on phones
+every photo reverts to its own aspect ratio so nothing is cropped.
+
+The signature element is the aperture. It opens across the opening frame on
+load, marks every section divider, and stands in as the logo mark.
 
 Accessibility and motion are handled globally: a skip link, a single brass focus
 ring that no utility class can cancel, 44px minimum touch targets, and

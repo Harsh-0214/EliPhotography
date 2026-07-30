@@ -75,14 +75,44 @@ export const services: Service[] = [
   },
 ];
 
-/** Gallery filters. `slug` doubles as the folder / filename prefix. */
+/**
+ * The gallery chapters, in the order they appear down the page. `slug`
+ * doubles as the folder name under /public/images/gallery and as the
+ * filename prefix, and it is the anchor each chapter scrolls to.
+ *
+ * A chapter with no photographs is skipped entirely rather than shown empty.
+ */
 export const categories = [
-  { slug: "baby", label: "Baby" },
-  { slug: "family", label: "Family" },
-  { slug: "portraits", label: "Portraits" },
-  { slug: "children", label: "Children" },
-  { slug: "vehicles", label: "Vehicles" },
-  { slug: "landscape", label: "Landscape" },
+  {
+    slug: "baby",
+    label: "Baby",
+    blurb: "Newborn to the first birthday.",
+  },
+  {
+    slug: "children",
+    label: "Children",
+    blurb: "Ages one and up. Play-led, never posed.",
+  },
+  {
+    slug: "family",
+    label: "Family",
+    blurb: "Parents, children, and the moments in between.",
+  },
+  {
+    slug: "portraits",
+    label: "Portraits",
+    blurb: "One person, on location, doing what they do.",
+  },
+  {
+    slug: "vehicles",
+    label: "Vehicles",
+    blurb: "Cars and motorcycles, in the light they deserve.",
+  },
+  {
+    slug: "landscape",
+    label: "Landscape",
+    blurb: "Places, quietly.",
+  },
 ] as const;
 
 export type CategorySlug = (typeof categories)[number]["slug"];

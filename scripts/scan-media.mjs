@@ -7,13 +7,12 @@
  * Next's file tracer walk the entire project, and Vercel then drops the
  * route from the build output — the page builds fine locally and 404s in
  * production. Scanning up front keeps the page a pure static render.
- *
- * Only file headers are read, never pixel data, so dimensions are cheap.
  */
 
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import sharp from "sharp";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const PUBLIC_DIR = path.join(ROOT, "public");
@@ -31,144 +30,63 @@ const CATEGORIES = [
   "landscape",
 ];
 
-/* ------------------------------------------------------------------
-   Intrinsic dimensions from file headers
-   ------------------------------------------------------------------ */
-
-function png(b) {
-  if (b.length < 24) return null;
-  if (b.readUInt32BE(0) !== 0x89504e47) return null;
-  if (b.toString("ascii", 12, 16) !== "IHDR") return null;
-  return { width: b.readUInt32BE(16), height: b.readUInt32BE(20) };
-}
-
-function gif(b) {
-  if (b.length < 10) return null;
-  if (b.toString("ascii", 0, 3) !== "GIF") return null;
-  return { width: b.readUInt16LE(6), height: b.readUInt16LE(8) };
-}
-
-function webp(b) {
-  if (b.length < 30) return null;
-  if (b.toString("ascii", 0, 4) !== "RIFF") return null;
-  if (b.toString("ascii", 8, 12) !== "WEBP") return null;
-
-  const chunk = b.toString("ascii", 12, 16);
-
-  if (chunk === "VP8X") {
-    return {
-      width: 1 + (b.readUIntLE(24, 3) & 0xffffff),
-      height: 1 + (b.readUIntLE(27, 3) & 0xffffff),
-    };
-  }
-  if (chunk === "VP8 ") {
-    return {
-      width: b.readUInt16LE(26) & 0x3fff,
-      height: b.readUInt16LE(28) & 0x3fff,
-    };
-  }
-  if (chunk === "VP8L") {
-    const bits = b.readUInt32LE(21);
-    return { width: (bits & 0x3fff) + 1, height: ((bits >> 14) & 0x3fff) + 1 };
-  }
-  return null;
-}
-
-function avif(b) {
-  // ISO-BMFF: walk the meta/iprp/ipco boxes for the ispe entry.
-  if (b.length < 12) return null;
-  if (b.toString("ascii", 4, 8) !== "ftyp") return null;
-
-  const marker = b.indexOf("ispe", 0, "ascii");
-  if (marker < 0 || marker + 16 > b.length) return null;
-
-  return {
-    width: b.readUInt32BE(marker + 8),
-    height: b.readUInt32BE(marker + 12),
-  };
-}
-
-function jpeg(b) {
-  if (b.length < 4 || b.readUInt16BE(0) !== 0xffd8) return null;
-
-  let offset = 2;
-  while (offset + 9 < b.length) {
-    if (b[offset] !== 0xff) {
-      offset += 1;
-      continue;
-    }
-
-    const marker = b[offset + 1];
-
-    // Standalone markers carry no payload.
-    if (marker === 0xd8 || marker === 0x01 || (marker >= 0xd0 && marker <= 0xd7)) {
-      offset += 2;
-      continue;
-    }
-
-    // Start-of-frame markers hold the dimensions. 0xC4 / 0xC8 / 0xCC are
-    // DHT / JPG / DAC, not frame headers.
-    const isFrameHeader =
-      marker >= 0xc0 &&
-      marker <= 0xcf &&
-      marker !== 0xc4 &&
-      marker !== 0xc8 &&
-      marker !== 0xcc;
-
-    if (isFrameHeader) {
-      return {
-        height: b.readUInt16BE(offset + 5),
-        width: b.readUInt16BE(offset + 7),
-      };
-    }
-
-    const length = b.readUInt16BE(offset + 2);
-    if (length < 2) return null;
-    offset += 2 + length;
-  }
-
-  return null;
-}
-
-function readImageSize(buffer) {
-  return (
-    png(buffer) ??
-    gif(buffer) ??
-    webp(buffer) ??
-    avif(buffer) ??
-    jpeg(buffer)
-  );
-}
+/**
+ * Which photograph opens the site when no dedicated /public/images/hero.*
+ * file exists. Any path fragment under images/gallery works; if it matches
+ * nothing, the rules below pick the first wide frame instead.
+ */
+const HERO_PICK = "family/05-sunset-on-the-cliff";
+const HERO_FALLBACK_ORDER = ["family", "landscape", "baby", "children", "portraits"];
 
 /* ------------------------------------------------------------------
    Scanning
    ------------------------------------------------------------------ */
 
-function measure(relativePath) {
+function pickHero(gallery) {
+  const named = gallery.find((photo) => photo.src.includes(HERO_PICK));
+  if (named) return named;
+
+  for (const category of HERO_FALLBACK_ORDER) {
+    const inCategory = gallery.filter((photo) => photo.category === category);
+    const wide = inCategory.find((photo) => photo.width / photo.height >= 1.35);
+    if (wide) return wide;
+    if (inCategory[0]) return inCategory[0];
+  }
+  return gallery[0] ?? null;
+}
+
+/**
+ * Dimensions come from sharp rather than hand-parsed headers: camera JPEGs
+ * bury the frame header behind EXIF blocks big enough to defeat a fixed-size
+ * read, and they carry an orientation tag that decides whether the file is
+ * actually portrait or landscape. Browsers and Next's optimiser both honour
+ * that tag, so the layout has to use the rotated dimensions.
+ */
+async function measure(relativePath) {
   const absolute = path.join(PUBLIC_DIR, relativePath);
-  let handle;
   try {
-    handle = fs.openSync(absolute, "r");
-    const head = Buffer.alloc(65536);
-    const bytes = fs.readSync(handle, head, 0, head.length, 0);
-    const size = readImageSize(head.subarray(0, bytes));
-    if (!size?.width || !size?.height) {
+    const { width, height, orientation } = await sharp(absolute).metadata();
+    if (!width || !height) {
       console.warn(`[media] could not read dimensions: ${relativePath}`);
       return null;
     }
-    return { src: `/${relativePath.split(path.sep).join("/")}`, ...size };
-  } catch {
+    const rotated = typeof orientation === "number" && orientation >= 5;
+    return {
+      src: `/${relativePath.split(path.sep).join("/")}`,
+      width: rotated ? height : width,
+      height: rotated ? width : height,
+    };
+  } catch (error) {
+    console.warn(`[media] skipped ${relativePath}: ${error.message}`);
     return null;
-  } finally {
-    if (handle !== undefined) fs.closeSync(handle);
   }
 }
 
-function findNamed(dir, basename) {
+async function findNamed(dir, basename) {
   for (const extension of IMAGE_EXTENSIONS) {
     const relative = path.join(dir, `${basename}${extension}`);
     if (fs.existsSync(path.join(PUBLIC_DIR, relative))) {
-      const image = measure(relative);
+      const image = await measure(relative);
       if (image) return image;
     }
   }
@@ -198,11 +116,11 @@ function toCaption(filename) {
     .replace(/\b\w/g, (character) => character.toUpperCase());
 }
 
-function scanGallery() {
+async function scanGallery() {
   const images = [];
 
-  const push = (relativePath, category, name) => {
-    const measured = measure(relativePath);
+  const push = async (relativePath, category, name) => {
+    const measured = await measure(relativePath);
     if (!measured) return;
     images.push({
       ...measured,
@@ -215,7 +133,7 @@ function scanGallery() {
   // Layout A: one folder per category.
   for (const slug of CATEGORIES) {
     for (const name of listImageFiles(path.join("images", "gallery", slug))) {
-      push(path.join("images", "gallery", slug, name), slug, name);
+      await push(path.join("images", "gallery", slug, name), slug, name);
     }
   }
 
@@ -223,7 +141,7 @@ function scanGallery() {
   for (const name of listImageFiles(path.join("images", "gallery"))) {
     const prefix = name.split(/[-_]/)[0]?.toLowerCase() ?? "";
     if (!CATEGORIES.includes(prefix)) continue;
-    push(
+    await push(
       path.join("images", "gallery", name),
       prefix,
       name.slice(prefix.length + 1) || name,
@@ -233,11 +151,16 @@ function scanGallery() {
   return images;
 }
 
+const gallery = await scanGallery();
+
 const manifest = {
-  logo: findNamed("logo", "elish-modi-logo"),
-  hero: findNamed("images", "hero"),
-  about: findNamed("images", "about"),
-  gallery: scanGallery(),
+  logo: await findNamed("logo", "elish-modi-logo"),
+  /* A dedicated file wins; otherwise the gallery lends the opening frame. */
+  hero: (await findNamed("images", "hero")) ?? pickHero(gallery),
+  /* Never borrowed — this one is captioned as Elish, so it stays null until
+     a real portrait is supplied. */
+  about: await findNamed("images", "about"),
+  gallery,
 };
 
 fs.mkdirSync(path.dirname(OUTPUT), { recursive: true });

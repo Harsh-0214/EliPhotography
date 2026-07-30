@@ -67,9 +67,10 @@ export function SiteHeader({ logo }: { logo: SiteImage | null }) {
     <header
       className={cn(
         "fixed inset-x-0 top-0 z-40 h-[5.5rem] transition-[background-color,box-shadow,border-color] duration-300 ease-[var(--ease-shutter)]",
+        // Over the opening frame the bar is glass; once past it, paper.
         scrolled
           ? "border-b border-ivory-3 bg-ivory/92 backdrop-blur-md"
-          : "border-b border-transparent bg-ivory",
+          : "on-charcoal border-b border-transparent bg-transparent",
       )}
     >
       <div className="shell flex h-full items-center justify-between gap-6">
@@ -101,21 +102,28 @@ export function SiteHeader({ logo }: { logo: SiteImage | null }) {
                 aria-current={isActive ? "true" : undefined}
                 className={cn(
                   "kicker group relative py-2 transition-[color] duration-200",
-                  isActive ? "text-brass-deep" : "text-ink hover:text-brass-deep",
+                  scrolled
+                    ? isActive
+                      ? "text-brass-deep"
+                      : "text-ink hover:text-brass-deep"
+                    : isActive
+                      ? "text-brass"
+                      : "text-ivory hover:text-brass",
                 )}
               >
                 {item.label}
                 <span
                   aria-hidden="true"
                   className={cn(
-                    "absolute -bottom-0.5 left-0 h-px bg-brass-deep transition-[width] duration-300 ease-[var(--ease-shutter)]",
+                    "absolute -bottom-0.5 left-0 h-px transition-[width] duration-300 ease-[var(--ease-shutter)]",
+                    scrolled ? "bg-brass-deep" : "bg-brass",
                     isActive ? "w-full" : "w-0 group-hover:w-full",
                   )}
                 />
               </a>
             );
           })}
-          <Button asChild size="sm" variant="solid">
+          <Button asChild size="sm" variant={scrolled ? "solid" : "paper"}>
             <a href="#contact">Book a session</a>
           </Button>
         </nav>
@@ -125,7 +133,10 @@ export function SiteHeader({ logo }: { logo: SiteImage | null }) {
           onClick={() => setMenuOpen(true)}
           aria-label="Open menu"
           aria-expanded={menuOpen}
-          className="-mr-2 flex h-11 w-11 items-center justify-center text-ink transition-transform duration-150 ease-[var(--ease-shutter)] active:scale-[0.94] md:hidden"
+          className={cn(
+            "-mr-2 flex h-11 w-11 items-center justify-center transition-[color,transform] duration-150 ease-[var(--ease-shutter)] active:scale-[0.94] md:hidden",
+            scrolled ? "text-ink" : "text-ivory",
+          )}
         >
           <Menu aria-hidden="true" className="h-5 w-5" strokeWidth={1.5} />
         </button>

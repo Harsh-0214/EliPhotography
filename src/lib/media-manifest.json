@@ -1,6 +1,238 @@
 {
   "logo": null,
-  "hero": null,
+  "hero": {
+    "src": "/images/gallery/family/05-sunset-on-the-cliff.JPG",
+    "width": 6000,
+    "height": 4000,
+    "id": "/images/gallery/family/05-sunset-on-the-cliff.JPG",
+    "category": "family",
+    "caption": "Sunset On The Cliff"
+  },
   "about": null,
-  "gallery": []
+  "gallery": [
+    {
+      "src": "/images/gallery/baby/01-christmas-eve.JPG",
+      "width": 6000,
+      "height": 4000,
+      "id": "/images/gallery/baby/01-christmas-eve.JPG",
+      "category": "baby",
+      "caption": "Christmas Eve"
+    },
+    {
+      "src": "/images/gallery/baby/02-first-days.JPG",
+      "width": 6000,
+      "height": 4000,
+      "id": "/images/gallery/baby/02-first-days.JPG",
+      "category": "baby",
+      "caption": "First Days"
+    },
+    {
+      "src": "/images/gallery/baby/03-wide-awake.JPG",
+      "width": 4000,
+      "height": 6000,
+      "id": "/images/gallery/baby/03-wide-awake.JPG",
+      "category": "baby",
+      "caption": "Wide Awake"
+    },
+    {
+      "src": "/images/gallery/baby/04-morning-light.JPG",
+      "width": 6000,
+      "height": 4000,
+      "id": "/images/gallery/baby/04-morning-light.JPG",
+      "category": "baby",
+      "caption": "Morning Light"
+    },
+    {
+      "src": "/images/gallery/baby/05-bear-on-watch.JPG",
+      "width": 6000,
+      "height": 4000,
+      "id": "/images/gallery/baby/05-bear-on-watch.JPG",
+      "category": "baby",
+      "caption": "Bear On Watch"
+    },
+    {
+      "src": "/images/gallery/baby/06-the-blue-sofa.JPG",
+      "width": 6000,
+      "height": 4000,
+      "id": "/images/gallery/baby/06-the-blue-sofa.JPG",
+      "category": "baby",
+      "caption": "The Blue Sofa"
+    },
+    {
+      "src": "/images/gallery/baby/07-remote-control.JPG",
+      "width": 6000,
+      "height": 4000,
+      "id": "/images/gallery/baby/07-remote-control.JPG",
+      "category": "baby",
+      "caption": "Remote Control"
+    },
+    {
+      "src": "/images/gallery/baby/08-panda-friend.JPG",
+      "width": 6000,
+      "height": 4000,
+      "id": "/images/gallery/baby/08-panda-friend.JPG",
+      "category": "baby",
+      "caption": "Panda Friend"
+    },
+    {
+      "src": "/images/gallery/baby/09-pink-sunglasses.JPG",
+      "width": 6000,
+      "height": 4000,
+      "id": "/images/gallery/baby/09-pink-sunglasses.JPG",
+      "category": "baby",
+      "caption": "Pink Sunglasses"
+    },
+    {
+      "src": "/images/gallery/baby/10-just-peeking.JPG",
+      "width": 6000,
+      "height": 4000,
+      "id": "/images/gallery/baby/10-just-peeking.JPG",
+      "category": "baby",
+      "caption": "Just Peeking"
+    },
+    {
+      "src": "/images/gallery/family/01-fast-asleep.JPG",
+      "width": 6000,
+      "height": 4000,
+      "id": "/images/gallery/family/01-fast-asleep.JPG",
+      "category": "family",
+      "caption": "Fast Asleep"
+    },
+    {
+      "src": "/images/gallery/family/02-sunday-sunglasses.JPG",
+      "width": 6000,
+      "height": 4000,
+      "id": "/images/gallery/family/02-sunday-sunglasses.JPG",
+      "category": "family",
+      "caption": "Sunday Sunglasses"
+    },
+    {
+      "src": "/images/gallery/family/03-carried.JPG",
+      "width": 6000,
+      "height": 4000,
+      "id": "/images/gallery/family/03-carried.JPG",
+      "category": "family",
+      "caption": "Carried"
+    },
+    {
+      "src": "/images/gallery/family/04-a-kiss-in-the-garden.JPG",
+      "width": 4000,
+      "height": 6000,
+      "id": "/images/gallery/family/04-a-kiss-in-the-garden.JPG",
+      "category": "family",
+      "caption": "A Kiss In The Garden"
+    },
+    {
+      "src": "/images/gallery/family/05-sunset-on-the-cliff.JPG",
+      "width": 6000,
+      "height": 4000,
+      "id": "/images/gallery/family/05-sunset-on-the-cliff.JPG",
+      "category": "family",
+      "caption": "Sunset On The Cliff"
+    },
+    {
+      "src": "/images/gallery/portraits/01-the-violinist.JPG",
+      "width": 2664,
+      "height": 4000,
+      "id": "/images/gallery/portraits/01-the-violinist.JPG",
+      "category": "portraits",
+      "caption": "The Violinist"
+    },
+    {
+      "src": "/images/gallery/portraits/02-the-piper.JPG",
+      "width": 2664,
+      "height": 4000,
+      "id": "/images/gallery/portraits/02-the-piper.JPG",
+      "category": "portraits",
+      "caption": "The Piper"
+    },
+    {
+      "src": "/images/gallery/portraits/03-full-highland-dress.JPG",
+      "width": 2664,
+      "height": 4000,
+      "id": "/images/gallery/portraits/03-full-highland-dress.JPG",
+      "category": "portraits",
+      "caption": "Full Highland Dress"
+    },
+    {
+      "src": "/images/gallery/portraits/04-royal-mile-busker.JPG",
+      "width": 4000,
+      "height": 2664,
+      "id": "/images/gallery/portraits/04-royal-mile-busker.JPG",
+      "category": "portraits",
+      "caption": "Royal Mile Busker"
+    },
+    {
+      "src": "/images/gallery/portraits/05-street-theatre.JPG",
+      "width": 4000,
+      "height": 2664,
+      "id": "/images/gallery/portraits/05-street-theatre.JPG",
+      "category": "portraits",
+      "caption": "Street Theatre"
+    },
+    {
+      "src": "/images/gallery/portraits/06-the-living-statue.JPG",
+      "width": 4000,
+      "height": 2664,
+      "id": "/images/gallery/portraits/06-the-living-statue.JPG",
+      "category": "portraits",
+      "caption": "The Living Statue"
+    },
+    {
+      "src": "/images/gallery/children/01-festival-morning.JPG",
+      "width": 6000,
+      "height": 4000,
+      "id": "/images/gallery/children/01-festival-morning.JPG",
+      "category": "children",
+      "caption": "Festival Morning"
+    },
+    {
+      "src": "/images/gallery/children/02-first-basket.JPG",
+      "width": 4000,
+      "height": 6000,
+      "id": "/images/gallery/children/02-first-basket.JPG",
+      "category": "children",
+      "caption": "First Basket"
+    },
+    {
+      "src": "/images/gallery/children/03-quiet-afternoon.JPG",
+      "width": 6000,
+      "height": 4000,
+      "id": "/images/gallery/children/03-quiet-afternoon.JPG",
+      "category": "children",
+      "caption": "Quiet Afternoon"
+    },
+    {
+      "src": "/images/gallery/landscape/01-vital-spark.JPG",
+      "width": 4000,
+      "height": 2664,
+      "id": "/images/gallery/landscape/01-vital-spark.JPG",
+      "category": "landscape",
+      "caption": "Vital Spark"
+    },
+    {
+      "src": "/images/gallery/landscape/02-glenfinnan-viaduct.JPG",
+      "width": 4000,
+      "height": 2664,
+      "id": "/images/gallery/landscape/02-glenfinnan-viaduct.JPG",
+      "category": "landscape",
+      "caption": "Glenfinnan Viaduct"
+    },
+    {
+      "src": "/images/gallery/landscape/03-edinburgh-skyline.JPG",
+      "width": 4000,
+      "height": 2664,
+      "id": "/images/gallery/landscape/03-edinburgh-skyline.JPG",
+      "category": "landscape",
+      "caption": "Edinburgh Skyline"
+    },
+    {
+      "src": "/images/gallery/landscape/04-last-light.JPG",
+      "width": 6000,
+      "height": 4000,
+      "id": "/images/gallery/landscape/04-last-light.JPG",
+      "category": "landscape",
+      "caption": "Last Light"
+    }
+  ]
 }
