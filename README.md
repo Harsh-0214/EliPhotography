@@ -80,9 +80,13 @@ public/images/about.jpg     # portrait of Elish in the About section
 Both are optional. The hero is worth adding first — it is the frame the aperture
 opens onto.
 
-> The home page is statically rendered, so **restart `npm run dev`** (or rebuild)
-> after adding files. Sizes are read from each file's header, so the gallery lays
-> out at true aspect ratios with no cropping and no layout shift.
+> **Restart `npm run dev`** (or rebuild) after adding files. `scripts/scan-media.mjs`
+> runs automatically as a `predev` / `prebuild` step, scans `public/`, and writes
+> `src/lib/media-manifest.json`. Dimensions come from each file's header, so the
+> gallery lays out at true aspect ratios with no cropping and no layout shift.
+>
+> `npm run scan:media` re-runs the scan on its own if you want to see what it
+> picked up without a full build.
 
 ---
 
@@ -128,10 +132,19 @@ src/
     sections/         hero, about, rate card, gallery, contact
     ui/               shadcn/ui primitives, restyled
   lib/
-    site.ts           client details, services, categories  ← edit this
-    media.ts          reads /public/images and /public/logo
-    image-size.ts     intrinsic dimensions from file headers
+    site.ts               client details, services, categories  ← edit this
+    media.ts              typed access to the media manifest
+    media-manifest.json   generated — do not edit by hand
+scripts/
+  scan-media.mjs      scans /public before dev and build
 ```
+
+The scan deliberately happens **before** the build rather than inside a Server
+Component. Reading the filesystem from the page's own module graph makes Next's
+file tracer pull the whole project into the route's file list, and Vercel then
+ships a deployment with no `/` route — it builds clean locally and 404s in
+production. Keeping the scan in a `prebuild` step leaves the page a pure static
+render.
 
 ### Design notes
 

@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "scan:media": "node scripts/scan-media.mjs",
+    "predev": "node scripts/scan-media.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/scan-media.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
