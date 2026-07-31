@@ -87,31 +87,43 @@ export const categories = [
     slug: "baby",
     label: "Baby",
     blurb: "Newborn to the first birthday.",
+    detail:
+      "Sessions run at home in the first weeks, or in studio once they are sitting up. We work around feeds and naps — there is no schedule to keep.",
   },
   {
     slug: "children",
     label: "Children",
     blurb: "Ages one and up. Play-led, never posed.",
+    detail:
+      "No countdowns and no “say cheese”. We follow whatever they are already doing, which is why the pictures come out looking like them.",
   },
   {
     slug: "family",
     label: "Family",
     blurb: "Parents, children, and the moments in between.",
+    detail:
+      "Everyone in one frame first, then the ones that matter more — the in-between moments while you are all simply together.",
   },
   {
     slug: "portraits",
     label: "Portraits",
     blurb: "One person, on location, doing what they do.",
+    detail:
+      "An hour on location, doing the thing you actually do. Musicians play, makers make. It shows in the face.",
   },
   {
     slug: "vehicles",
     label: "Vehicles",
     blurb: "Cars and motorcycles, in the light they deserve.",
+    detail:
+      "Golden hour or a clean garage. Cars and bikes photographed like portraits, with attention to line, paint and reflection.",
   },
   {
     slug: "landscape",
     label: "Landscape",
     blurb: "Places, quietly.",
+    detail:
+      "Commissioned work and prints from a growing archive of Scotland and the coast. Tell me the wall and I will tell you the frame.",
   },
 ] as const;
 

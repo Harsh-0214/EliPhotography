@@ -54,6 +54,7 @@ export default function HomePage() {
             slug={chapter.slug}
             label={chapter.label}
             blurb={chapter.blurb}
+            detail={chapter.detail}
             photos={chapter.photos}
           />
           {index === aboutAfter ? (

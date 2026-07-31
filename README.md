@@ -67,11 +67,17 @@ Filename rules:
   title a print.
 - Supported: `.jpg` `.jpeg` `.png` `.webp` `.avif`
 
-Each category becomes a **chapter** down the page: a named opener followed by
-that category's photographs laid edge to edge in rows of varying height and
-width. A category with no photographs in it is skipped entirely — nothing
-renders as an empty section. Until any photos exist at all, the page falls back
-to reserved brass frames.
+Each category becomes a **chapter**: a card of paper holding the whole left edge
+of the section — category name, what the session involves, length, deliverables,
+price and a booking link — with that category's photographs running past it on
+the right in blocks of two to four. The card is sticky, so the price and the
+booking link stay on screen for every frame in the chapter.
+
+A category with no photographs in it is skipped entirely. Until any photos exist
+at all, the page falls back to reserved brass frames.
+
+Chapter copy lives in `categories` in `src/lib/site.ts` (`blurb` and `detail`);
+the session facts and price come from `services` in the same file.
 
 ### Hero and portrait
 
@@ -139,7 +145,7 @@ src/
     icon.svg          favicon (the aperture mark)
   components/
     brand/            aperture mark, divider, logo, placeholder plate
-    gallery/          chapters, the mosaic layout, the shared lightbox
+    gallery/          chapters, the chapter card, the shared lightbox
     motion/           scroll reveal + clip reveal wrappers
     sections/         hero, about, rate card, contact
     ui/               shadcn/ui primitives, restyled
@@ -174,13 +180,16 @@ tradition as the wordmark. Utility face is **Jost**, a geometric sans that sets
 well in the wide-tracked capitals of the logo's "PHOTOGRAPHY" line. Brass is
 reserved for accents, rules and hovers; it is never a background.
 
-The whole page is the gallery. It opens on a full-screen photograph, lists the
-categories, then runs each chapter edge to edge — no gutters, no container, row
-heights and column spans varying so no two rows repeat. Written sections sit
-*between* chapters rather than after them, so the page never stops being a
-gallery. Within a row the widest cell takes the widest photograph, which drops
-portrait-orientation frames into the narrow columns where they belong; on phones
-every photo reverts to its own aspect ratio so nothing is cropped.
+The whole page is the gallery. It opens on a full-screen photograph, then a slim
+centred bar names the categories, then each chapter runs edge to edge — no
+gutters, no container. Written sections sit *between* chapters rather than after
+them, so the page never stops being a gallery.
+
+Chapter blocks are flex compositions that fill their own width exactly rather
+than grid spans, so no arrangement of photographs can leave a hole; block shapes
+alternate so two neighbours never share a silhouette, and where a block holds two
+frames it stacks them for landscapes and splits them into columns when either is
+upright.
 
 The signature element is the aperture. It opens across the opening frame on
 load, marks every section divider, and stands in as the logo mark.

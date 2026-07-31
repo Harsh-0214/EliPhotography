@@ -17,11 +17,13 @@ export function ChapterCard({
   slug,
   label,
   blurb,
+  detail,
   count,
 }: {
   slug: string;
   label: string;
   blurb: string;
+  detail: string;
   count: number;
 }) {
   const { setShootType } = useBooking();
@@ -49,16 +51,20 @@ export function ChapterCard({
           {label}
         </h2>
 
-        <p className="mt-4 text-pretty text-[0.9875rem] leading-relaxed text-ink-muted">
+        <p className="display mt-5 max-w-[26ch] text-pretty text-[1.2rem] leading-[1.4] text-ink md:text-[1.35rem]">
           {blurb}
+        </p>
+
+        <p className="mt-5 max-w-[42ch] text-pretty text-[0.9375rem] leading-relaxed text-ink-muted">
+          {detail}
         </p>
       </div>
 
-      {/* The card is taller than its copy on most chapters. Rather than leave
-          a hole, the shutter sits in the space and holds it open. */}
+      {/* Holds the column open on the taller chapters without leaving the
+          space looking accidental. */}
       <div className="flex flex-1 items-center py-8">
         <ApertureMark
-          className="h-7 w-7 text-brass-deep/35 md:h-8 md:w-8"
+          className="h-7 w-7 text-brass-deep/30 md:h-8 md:w-8"
           strokeWidth={3}
         />
       </div>
