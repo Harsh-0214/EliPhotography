@@ -4,7 +4,7 @@ import { isPortrait, splitIntoBlocks } from "@/components/gallery/compose";
 import type { GalleryImage } from "@/lib/media";
 
 /**
- * One category.
+ * One category, shown when its tab is selected.
  *
  * The card holds the whole left edge of the section and stays there while
  * the photographs move past it — so the price, the session length and the
@@ -14,8 +14,9 @@ import type { GalleryImage } from "@/lib/media";
 
 const GAP = "gap-1.5";
 
-/** One block fills the screen below the fixed masthead. */
-const PANEL = "h-[62svh] md:h-[calc(100svh-5.5rem)]";
+/* The masthead (5.5rem) and the sticky category bar (3.5rem) both sit above
+   the work, so a full-height panel is the screen minus both — 9rem. */
+const PANEL = "h-[62svh] md:h-[calc(100svh-9rem)]";
 
 const SIZES = {
   full: "(max-width: 767px) 100vw, 64vw",
@@ -103,12 +104,14 @@ export function Chapter({
   label,
   blurb,
   detail,
+  cta,
   photos,
 }: {
   slug: string;
   label: string;
   blurb: string;
   detail: string;
+  cta: string;
   photos: GalleryImage[];
 }) {
   if (photos.length === 0) return null;
@@ -124,12 +127,13 @@ export function Chapter({
       {/* self-stretch gives the column the full height of the section, which
           is what the sticky panel inside it needs to travel against. */}
       <div className="md:w-[36%] md:shrink-0 md:self-stretch lg:w-[32%]">
-        <div className="md:sticky md:top-[5.5rem] md:h-[calc(100svh-5.5rem)]">
+        <div className="md:sticky md:top-[9rem] md:h-[calc(100svh-9rem)]">
           <ChapterCard
             slug={slug}
             label={label}
             blurb={blurb}
             detail={detail}
+            cta={cta}
             count={photos.length}
           />
         </div>

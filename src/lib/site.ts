@@ -89,6 +89,7 @@ export const categories = [
     blurb: "Newborn to the first birthday.",
     detail:
       "Sessions run at home in the first weeks, or in studio once they are sitting up. We work around feeds and naps — there is no schedule to keep.",
+    cta: "Book a baby session",
   },
   {
     slug: "children",
@@ -96,6 +97,7 @@ export const categories = [
     blurb: "Ages one and up. Play-led, never posed.",
     detail:
       "No countdowns and no “say cheese”. We follow whatever they are already doing, which is why the pictures come out looking like them.",
+    cta: "Book a children’s session",
   },
   {
     slug: "family",
@@ -103,6 +105,7 @@ export const categories = [
     blurb: "Parents, children, and the moments in between.",
     detail:
       "Everyone in one frame first, then the ones that matter more — the in-between moments while you are all simply together.",
+    cta: "Book a family session",
   },
   {
     slug: "portraits",
@@ -110,6 +113,7 @@ export const categories = [
     blurb: "One person, on location, doing what they do.",
     detail:
       "An hour on location, doing the thing you actually do. Musicians play, makers make. It shows in the face.",
+    cta: "Book a portrait session",
   },
   {
     slug: "vehicles",
@@ -117,6 +121,7 @@ export const categories = [
     blurb: "Cars and motorcycles, in the light they deserve.",
     detail:
       "Golden hour or a clean garage. Cars and bikes photographed like portraits, with attention to line, paint and reflection.",
+    cta: "Book a vehicle shoot",
   },
   {
     slug: "landscape",
@@ -124,6 +129,7 @@ export const categories = [
     blurb: "Places, quietly.",
     detail:
       "Commissioned work and prints from a growing archive of Scotland and the coast. Tell me the wall and I will tell you the frame.",
+    cta: "Enquire about a commission",
   },
 ] as const;
 

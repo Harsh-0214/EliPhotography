@@ -67,17 +67,23 @@ Filename rules:
   title a print.
 - Supported: `.jpg` `.jpeg` `.png` `.webp` `.avif`
 
-Each category becomes a **chapter**: a card of paper holding the whole left edge
-of the section — category name, what the session involves, length, deliverables,
-price and a booking link — with that category's photographs running past it on
-the right in blocks of two to four. The card is sticky, so the price and the
-booking link stay on screen for every frame in the chapter.
+Categories are **tabs**. A sticky bar under the masthead names each one; pressing
+a category swaps the work below it in place, without scrolling the page. Only
+the selected chapter is mounted, so the other categories' photographs are never
+downloaded.
 
-A category with no photographs in it is skipped entirely. Until any photos exist
-at all, the page falls back to reserved brass frames.
+Each chapter is a card of paper holding the whole left edge of the section —
+category name, what the session involves, length, deliverables, price and a
+booking link — with that category's photographs running past it on the right in
+blocks of two to four. The card is sticky too, so the price and the booking link
+stay on screen for every frame in the chapter.
 
-Chapter copy lives in `categories` in `src/lib/site.ts` (`blurb` and `detail`);
-the session facts and price come from `services` in the same file.
+A category with no photographs in it gets no tab at all. Until any photos exist,
+the page falls back to reserved brass frames.
+
+Chapter copy lives in `categories` in `src/lib/site.ts` — `blurb`, `detail` and
+the `cta` label on the booking link. The session facts and the price come from
+`services` in the same file.
 
 ### Hero and portrait
 
@@ -181,9 +187,8 @@ well in the wide-tracked capitals of the logo's "PHOTOGRAPHY" line. Brass is
 reserved for accents, rules and hovers; it is never a background.
 
 The whole page is the gallery. It opens on a full-screen photograph, then a slim
-centred bar names the categories, then each chapter runs edge to edge — no
-gutters, no container. Written sections sit *between* chapters rather than after
-them, so the page never stops being a gallery.
+centred tab bar names the categories, then the selected chapter runs edge to edge
+— no gutters, no container.
 
 Chapter blocks are flex compositions that fill their own width exactly rather
 than grid spans, so no arrangement of photographs can leave a hole; block shapes

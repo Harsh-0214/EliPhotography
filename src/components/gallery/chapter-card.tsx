@@ -18,12 +18,14 @@ export function ChapterCard({
   label,
   blurb,
   detail,
+  cta,
   count,
 }: {
   slug: string;
   label: string;
   blurb: string;
   detail: string;
+  cta: string;
   count: number;
 }) {
   const { setShootType } = useBooking();
@@ -102,7 +104,7 @@ export function ChapterCard({
             onClick={book}
             className="kicker group mt-6 inline-flex cursor-pointer items-center gap-2.5 text-ink transition-[color,transform] duration-200 ease-[var(--ease-shutter)] hover:text-brass-deep active:scale-[0.97]"
           >
-            Book a {label.toLowerCase()} session
+            {cta}
             <ArrowRight
               aria-hidden="true"
               className="h-3.5 w-3.5 transition-transform duration-300 ease-[var(--ease-shutter)] group-hover:translate-x-1"
