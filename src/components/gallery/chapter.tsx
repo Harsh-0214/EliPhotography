@@ -1,12 +1,29 @@
 import { PhotoFrame } from "@/components/gallery/photo-frame";
-import { buildMosaic } from "@/components/gallery/mosaic-layout";
-import { Reveal } from "@/components/motion/reveal";
+import { ChapterCard } from "@/components/gallery/chapter-card";
+import { composeChapter, type Block } from "@/components/gallery/compose";
 import type { GalleryImage } from "@/lib/media";
 
 /**
- * One category: a named opener, then that category's photographs laid
- * edge to edge in rows of varying height and width.
+ * One category, packed as a collage.
+ *
+ * Every block below fills its own width exactly — flex shares, not grid
+ * spans — so no arrangement of photographs can leave a hole. Block heights
+ * differ so the chapter reads as a composition rather than a filmstrip, and
+ * each block collapses to a shallower stack on phones.
  */
+
+const GAP = "gap-1.5";
+
+/** Panel heights. Deliberately shorter than a full screen so a chapter is
+    read in two or three scrolls rather than ten. */
+const HEIGHT: Record<Block["kind"], string> = {
+  card: "md:h-[54svh] md:min-h-[28rem]",
+  bigLeft: "h-[46svh] md:h-[54svh]",
+  quad: "h-[52svh] md:h-[58svh]",
+  pair: "h-[36svh] md:h-[46svh]",
+  solo: "h-[34svh] md:h-[42svh]",
+};
+
 export function Chapter({
   slug,
   label,
@@ -20,56 +37,118 @@ export function Chapter({
 }) {
   if (photos.length === 0) return null;
 
-  const rows = buildMosaic(photos);
+  const blocks = composeChapter(photos);
 
   return (
     <section
       id={slug}
       aria-labelledby={`${slug}-title`}
-      className="scroll-mt-[5.5rem] bg-charcoal"
+      className={`scroll-mt-[5.5rem] bg-charcoal flex flex-col ${GAP}`}
     >
-      <Reveal
-        as="header"
-        className="flex flex-col gap-6 px-6 pb-12 pt-14 sm:flex-row sm:items-end sm:justify-between md:px-10 md:pb-14 md:pt-20"
-      >
-        <div>
-          <span
-            aria-hidden="true"
-            className="block h-px w-14 bg-brass"
-          />
-          <h2
-            id={`${slug}-title`}
-            className="display mt-6 text-[clamp(2.75rem,8vw,6.5rem)] leading-[0.95] text-ivory"
-          >
-            {label}
-          </h2>
-          <p className="mt-5 max-w-[44ch] text-pretty text-[1.0625rem] leading-relaxed text-paper-muted">
-            {blurb}
-          </p>
-        </div>
+      {blocks.map((block, index) => {
+        const [a, b, c, d] = block.photos;
 
-        <p className="kicker shrink-0 text-brass sm:pb-3">
-          {photos.length} {photos.length === 1 ? "frame" : "frames"}
-        </p>
-      </Reveal>
-
-      <div className="flex flex-col gap-1.5">
-        {rows.map((row, index) => (
-          <div
-            key={index}
-            style={{ "--row-h": row.height } as React.CSSProperties}
-            className="grid grid-cols-1 gap-1.5 md:h-[var(--row-h)] md:grid-cols-12"
-          >
-            {row.cells.map((cell) => (
+        if (block.kind === "card") {
+          return (
+            <div
+              key={index}
+              className={`flex flex-col ${GAP} ${HEIGHT.card} md:flex-row`}
+            >
+              <div className="md:w-[40%] lg:w-[34%]">
+                <ChapterCard
+                  slug={slug}
+                  label={label}
+                  blurb={blurb}
+                  count={photos.length}
+                />
+              </div>
               <PhotoFrame
-                key={cell.photo.id}
-                photo={cell.photo}
-                span={cell.span}
+                photo={a}
+                sizes="(max-width: 767px) 100vw, 62vw"
+                className="h-[38svh] md:h-auto md:flex-1"
               />
-            ))}
+            </div>
+          );
+        }
+
+        if (block.kind === "bigLeft") {
+          return (
+            <div key={index} className={`flex ${GAP} ${HEIGHT.bigLeft}`}>
+              <PhotoFrame
+                photo={a}
+                sizes="(max-width: 767px) 58vw, 60vw"
+                className="w-[58%] md:w-[60%]"
+              />
+              <div className={`flex flex-1 flex-col ${GAP}`}>
+                <PhotoFrame
+                  photo={b}
+                  sizes="(max-width: 767px) 42vw, 40vw"
+                  className="flex-1"
+                />
+                <PhotoFrame
+                  photo={c}
+                  sizes="(max-width: 767px) 42vw, 40vw"
+                  className="flex-1"
+                />
+              </div>
+            </div>
+          );
+        }
+
+        if (block.kind === "quad") {
+          return (
+            <div key={index} className={`flex ${GAP} ${HEIGHT.quad}`}>
+              <PhotoFrame
+                photo={a}
+                sizes="(max-width: 767px) 40vw, 38vw"
+                className="w-[40%] md:w-[38%]"
+              />
+              <div className={`flex flex-1 flex-col ${GAP}`}>
+                <PhotoFrame
+                  photo={b}
+                  sizes="(max-width: 767px) 60vw, 62vw"
+                  className="flex-1"
+                />
+                <div className={`flex flex-1 ${GAP}`}>
+                  <PhotoFrame
+                    photo={c}
+                    sizes="(max-width: 767px) 30vw, 31vw"
+                    className="w-1/2"
+                  />
+                  <PhotoFrame
+                    photo={d}
+                    sizes="(max-width: 767px) 30vw, 31vw"
+                    className="w-1/2"
+                  />
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        if (block.kind === "pair") {
+          return (
+            <div key={index} className={`flex ${GAP} ${HEIGHT.pair}`}>
+              <PhotoFrame
+                photo={a}
+                sizes="(max-width: 767px) 55vw, 55vw"
+                className="w-[55%]"
+              />
+              <PhotoFrame
+                photo={b}
+                sizes="(max-width: 767px) 45vw, 45vw"
+                className="flex-1"
+              />
+            </div>
+          );
+        }
+
+        return (
+          <div key={index} className={HEIGHT.solo}>
+            <PhotoFrame photo={a} sizes="100vw" className="h-full w-full" />
           </div>
-        ))}
-      </div>
+        );
+      })}
     </section>
   );
 }
