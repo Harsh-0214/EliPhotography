@@ -22,7 +22,7 @@ export function RateCard() {
   return (
     <section
       id="rates"
-      className="scroll-mt-[5.5rem] bg-ivory-2 py-[var(--section-y)]"
+      className="bg-ivory-2 py-[var(--section-y)]"
     >
       <div className="shell">
         <SectionHeading

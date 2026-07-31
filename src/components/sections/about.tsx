@@ -27,7 +27,7 @@ export function About({
   return (
     <section
       id="about"
-      className="scroll-mt-[5.5rem] bg-ivory"
+      className="bg-ivory"
     >
       <div className="grid lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1fr)]">
         <ClipReveal className="relative aspect-[4/5] w-full lg:aspect-auto lg:min-h-[42rem]">

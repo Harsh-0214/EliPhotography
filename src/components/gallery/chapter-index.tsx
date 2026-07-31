@@ -17,7 +17,7 @@ export function ChapterIndex({
     <section
       id="work"
       aria-label="The work, by category"
-      className="scroll-mt-[5.5rem] bg-charcoal px-6 pb-11 pt-16 md:px-10 md:pb-14 md:pt-24"
+      className="bg-charcoal px-6 pb-11 pt-16 md:px-10 md:pb-14 md:pt-24"
     >
       <Reveal>
         <p className="kicker flex items-center gap-3 text-brass">

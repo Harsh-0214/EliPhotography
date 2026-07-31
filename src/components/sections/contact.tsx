@@ -51,7 +51,7 @@ export function Contact() {
   return (
     <section
       id="contact"
-      className="scroll-mt-[5.5rem] bg-ivory py-[var(--section-y)]"
+      className="bg-ivory py-[var(--section-y)]"
     >
       <div className="shell grid gap-14 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1fr)] lg:gap-24">
         <div>

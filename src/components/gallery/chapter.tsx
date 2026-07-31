@@ -43,7 +43,7 @@ export function Chapter({
     <section
       id={slug}
       aria-labelledby={`${slug}-title`}
-      className={`scroll-mt-[5.5rem] bg-charcoal flex flex-col ${GAP}`}
+      className={`bg-charcoal flex flex-col ${GAP}`}
     >
       {blocks.map((block, index) => {
         const [a, b, c, d] = block.photos;
