@@ -108,7 +108,7 @@ export function GalleryProvider({
                   type="button"
                   onClick={() => setOpenIndex(null)}
                   aria-label="Close"
-                  className="-mr-2 flex h-11 w-11 cursor-pointer items-center justify-center text-paper-muted transition-[color,transform] duration-150 ease-[var(--ease-shutter)] hover:text-ivory active:scale-[0.94]"
+                  className="-mr-2 flex h-11 w-11 cursor-pointer items-center justify-center text-paper-muted transition-[color,transform] duration-150 ease-[var(--ease-shutter)] hover:text-cream active:scale-[0.94]"
                 >
                   <X aria-hidden="true" className="h-5 w-5" strokeWidth={1.5} />
                 </button>
@@ -131,7 +131,7 @@ export function GalleryProvider({
               </div>
 
               <div className="flex items-center justify-between gap-4 px-5 py-4 md:px-8">
-                <p className="kicker-sm truncate text-ivory">
+                <p className="kicker-sm truncate text-cream">
                   {active.caption}
                 </p>
                 <div className="flex shrink-0 items-center gap-1">

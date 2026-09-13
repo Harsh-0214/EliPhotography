@@ -62,11 +62,11 @@ export function Hero({ photo }: { photo: SiteImage | null }) {
             className="mx-auto mt-7 max-w-[14rem] md:mt-9 md:max-w-xs"
           />
 
-          <h1 className="display mx-auto mt-7 max-w-[18ch] text-balance text-[2.3rem] leading-[1.04] text-ivory sm:text-[3rem] md:mt-9 md:text-[3.9rem] lg:text-[4.5rem]">
+          <h1 className="display mx-auto mt-7 max-w-[18ch] text-balance text-[2.3rem] leading-[1.04] text-cream sm:text-[3rem] md:mt-9 md:text-[3.9rem] lg:text-[4.5rem]">
             Light, patience, and one honest frame.
           </h1>
 
-          <p className="mx-auto mt-6 max-w-[44ch] text-pretty text-[1.0625rem] leading-relaxed text-ivory/85 md:text-[1.125rem]">
+          <p className="mx-auto mt-6 max-w-[44ch] text-pretty text-[1.0625rem] leading-relaxed text-cream/85 md:text-[1.125rem]">
             Newborn, family and portrait sessions photographed in natural
             light — unhurried, unposed, and made to be printed.
           </p>

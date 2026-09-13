@@ -83,7 +83,7 @@ export function ChapterTabs({
                   "kicker group relative inline-flex cursor-pointer items-start gap-1.5 py-2 transition-[color] duration-200",
                   selected
                     ? "text-brass"
-                    : "text-paper-muted hover:text-ivory",
+                    : "text-paper-muted hover:text-cream",
                 )}
               >
                 {tab.label}

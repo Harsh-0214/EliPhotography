@@ -38,7 +38,7 @@ export function Logo({
     <span
       className={cn(
         "flex h-full items-center gap-2.5",
-        tone === "paper" ? "text-ivory" : "text-ink",
+        tone === "paper" ? "text-cream" : "text-ink",
         className,
       )}
     >

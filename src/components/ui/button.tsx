@@ -14,11 +14,11 @@ const buttonVariants = cva(
     variants: {
       variant: {
         solid:
-          "bg-charcoal text-ivory hover:bg-brass-deep hover:text-ivory",
+          "bg-charcoal text-cream hover:bg-brass-deep hover:text-cream",
         outline:
           "border border-charcoal/25 bg-transparent text-ink hover:border-brass-deep hover:text-brass-deep",
         paper:
-          "border border-ivory/25 bg-transparent text-ivory hover:border-brass hover:text-brass",
+          "border border-cream/25 bg-transparent text-cream hover:border-brass hover:text-brass",
         quiet: "bg-transparent text-ink-muted hover:text-brass-deep",
       },
       size: {

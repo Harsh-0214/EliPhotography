@@ -48,7 +48,7 @@ export function SectionHeading({
       <h2
         className={cn(
           "display mt-5 max-w-[20ch] text-balance text-[2.1rem] sm:text-[2.6rem] md:text-[3.25rem]",
-          onPaper ? "text-ivory" : "text-ink",
+          onPaper ? "text-cream" : "text-ink",
         )}
       >
         {title}

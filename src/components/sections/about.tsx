@@ -48,7 +48,7 @@ export function About({
           )}
 
           {!isPortraitOfElish && standIn ? (
-            <p className="kicker-sm absolute bottom-4 left-5 text-ivory/85 [text-shadow:0_1px_6px_rgba(26,30,33,0.7)] md:bottom-6 md:left-8">
+            <p className="kicker-sm absolute bottom-4 left-5 text-cream/85 [text-shadow:0_1px_6px_rgba(26,30,33,0.7)] md:bottom-6 md:left-8">
               {standIn.caption}
             </p>
           ) : null}
@@ -61,22 +61,28 @@ export function About({
               About
             </p>
             <h2 className="display mt-6 text-[clamp(2.25rem,5vw,3.5rem)] text-ink">
-              How I work
+              About Me
             </h2>
           </Reveal>
 
           <div className="mt-8 max-w-[52ch] space-y-5 text-[1.0625rem] leading-relaxed text-ink-muted">
             <Reveal as="p" delay={0.05}>
-              I photograph people the way I would want my own family
-              photographed: quietly, with room to breathe. No countdowns, no
-              forced smiles. Just enough direction to get everyone comfortable,
-              and then a lot of patience while the real moment shows up.
+              Hi, I&rsquo;m Elish. Welcome to my page! I am a versatile
+              photographer specializing in capturing meaningful, high-quality
+              imagery across a range of subjects, including babies, children,
+              families, individual portraits, couples, products, and
+              landscapes. My work is rooted in a natural, timeless style that
+              emphasizes authentic emotion, thoughtful composition, and
+              attention to detail.
             </Reveal>
             <Reveal as="p" delay={0.1}>
-              Sessions run on natural light, indoors or out. You will see a
-              first gallery within two weeks, edited by hand, and I will help
-              you decide which frames are worth printing rather than leaving you
-              with four hundred files and no idea where to start.
+              From preserving the earliest moments of a baby&rsquo;s life to
+              creating confident individual portraits, warm family memories,
+              polished product imagery, and inspiring landscape visuals, I
+              approach each session with creativity, care, and
+              professionalism. My goal is to deliver images that feel
+              genuine, visually compelling, and lasting&mdash;whether for
+              personal memories, branding, or storytelling.
             </Reveal>
           </div>
 

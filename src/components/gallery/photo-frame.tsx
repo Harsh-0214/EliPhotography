@@ -53,7 +53,7 @@ export function PhotoFrame({
           className="pointer-events-none absolute inset-0 bg-charcoal-2/0 transition-[background-color] duration-500 group-hover:bg-charcoal-2/20"
         />
 
-        <figcaption className="kicker-sm pointer-events-none absolute inset-x-0 bottom-0 translate-y-1.5 bg-gradient-to-t from-charcoal-2/85 to-transparent px-4 pb-3 pt-12 text-left text-ivory opacity-0 transition-[opacity,transform] duration-400 ease-[var(--ease-shutter)] group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
+        <figcaption className="kicker-sm pointer-events-none absolute inset-x-0 bottom-0 translate-y-1.5 bg-gradient-to-t from-charcoal-2/85 to-transparent px-4 pb-3 pt-12 text-left text-cream opacity-0 transition-[opacity,transform] duration-400 ease-[var(--ease-shutter)] group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
           {photo.caption}
         </figcaption>
       </button>
