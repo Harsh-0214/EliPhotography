@@ -57,9 +57,16 @@ export default function RootLayout({
       className={`${marcellus.variable} ${jost.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-ivory">
+        <script
+          // Runs before hydration so the correct theme is set before first
+          // paint — otherwise the page would flash light before switching.
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("theme");var d=t?t==="dark":window.matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.classList.toggle("dark",d);}catch(e){}})();`,
+          }}
+        />
         <a
           href="#main"
-          className="kicker sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:left-4 focus-visible:top-4 focus-visible:z-100 focus-visible:bg-charcoal focus-visible:px-4 focus-visible:py-3 focus-visible:text-ivory"
+          className="kicker sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:left-4 focus-visible:top-4 focus-visible:z-100 focus-visible:bg-charcoal focus-visible:px-4 focus-visible:py-3 focus-visible:text-cream"
         >
           Skip to content
         </a>

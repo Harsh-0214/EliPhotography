@@ -5,9 +5,9 @@ export const site = {
   description:
     "Natural-light portrait, family and newborn photography by Elish Modi. Sessions by appointment.",
 
-  /* TODO(client): replace the three values below with the real ones. */
-  email: "hello@elishmodi.com",
-  phone: "+1 (000) 000-0000",
+  /* TODO(client): replace location and social hrefs with the real ones. */
+  email: "elishmodi.photo@gmail.com",
+  phone: "(647) 300-9589",
   location: "Available for travel",
 
   /* TODO(client): replace hrefs with the real profile URLs. */

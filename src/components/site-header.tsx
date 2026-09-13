@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { Menu, X } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 import type { SiteImage } from "@/lib/media";
 import { nav } from "@/lib/site";
@@ -108,7 +109,7 @@ export function SiteHeader({ logo }: { logo: SiteImage | null }) {
                       : "text-ink hover:text-brass-deep"
                     : isActive
                       ? "text-brass"
-                      : "text-ivory hover:text-brass",
+                      : "text-cream hover:text-brass",
                 )}
               >
                 {item.label}
@@ -123,6 +124,12 @@ export function SiteHeader({ logo }: { logo: SiteImage | null }) {
               </a>
             );
           })}
+          <ThemeToggle
+            className={cn(
+              "-mr-1",
+              scrolled ? "text-ink hover:text-brass-deep" : "text-cream hover:text-brass",
+            )}
+          />
           <Button asChild size="sm" variant={scrolled ? "solid" : "paper"}>
             <a href="#contact">Book a session</a>
           </Button>
@@ -135,7 +142,7 @@ export function SiteHeader({ logo }: { logo: SiteImage | null }) {
           aria-expanded={menuOpen}
           className={cn(
             "-mr-2 flex h-11 w-11 items-center justify-center transition-[color,transform] duration-150 ease-[var(--ease-shutter)] active:scale-[0.94] md:hidden",
-            scrolled ? "text-ink" : "text-ivory",
+            scrolled ? "text-ink" : "text-cream",
           )}
         >
           <Menu aria-hidden="true" className="h-5 w-5" strokeWidth={1.5} />
@@ -159,15 +166,18 @@ export function SiteHeader({ logo }: { logo: SiteImage | null }) {
               <span className="block h-11 py-1 text-[1.35rem]">
                 <Logo logo={logo} />
               </span>
-              <button
-                type="button"
-                onClick={() => setMenuOpen(false)}
-                aria-label="Close menu"
-                autoFocus
-                className="-mr-2 flex h-11 w-11 items-center justify-center text-ink transition-transform duration-150 ease-[var(--ease-shutter)] active:scale-[0.94]"
-              >
-                <X aria-hidden="true" className="h-5 w-5" strokeWidth={1.5} />
-              </button>
+              <div className="flex items-center">
+                <ThemeToggle className="text-ink hover:text-brass-deep" />
+                <button
+                  type="button"
+                  onClick={() => setMenuOpen(false)}
+                  aria-label="Close menu"
+                  autoFocus
+                  className="-mr-2 flex h-11 w-11 items-center justify-center text-ink transition-transform duration-150 ease-[var(--ease-shutter)] active:scale-[0.94]"
+                >
+                  <X aria-hidden="true" className="h-5 w-5" strokeWidth={1.5} />
+                </button>
+              </div>
             </div>
 
             <nav

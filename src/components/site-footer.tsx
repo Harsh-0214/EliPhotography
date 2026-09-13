@@ -5,7 +5,7 @@ import { nav, site } from "@/lib/site";
 
 export function SiteFooter({ logo }: { logo: SiteImage | null }) {
   return (
-    <footer className="on-charcoal bg-charcoal-2 text-ivory">
+    <footer className="on-charcoal bg-charcoal-2 text-cream">
       <div className="shell flex flex-col items-center py-16 text-center md:py-20">
         {/* The logo is a cream-stock mark, so it is mounted on its own plate
             rather than dropped straight onto charcoal. */}

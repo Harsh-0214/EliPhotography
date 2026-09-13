@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ------------------------------------------------------------------
    Elish Modi Photography — design tokens
    Every value below is derived from the client's logo:
@@ -26,6 +28,11 @@
   --color-ink: #23272b;
   --color-ink-muted: #5a6167;
   --color-paper-muted: #b4ae9e; /* muted text on charcoal */
+
+  /* Fixed pale text for use on the charcoal surfaces (hero, footer, galleries,
+     the "reviews" band). Those surfaces stay dark in both themes, so this
+     stays constant rather than inverting with --color-ivory. */
+  --color-cream: #f3efe1;
 
   --font-display: var(--font-marcellus), Georgia, "Times New Roman", serif;
   --font-sans: var(--font-jost), ui-sans-serif, system-ui, sans-serif;
@@ -54,6 +61,29 @@
     :root {
       --section-y: 10rem;
     }
+  }
+
+  /* Dark mode: the paper/ink roles invert, brass and the charcoal surfaces
+     (already dark) stay put and only get retuned for contrast. Overriding
+     the tokens here — rather than adding `dark:` classes everywhere — means
+     every existing bg-ivory/text-ink usage re-themes for free. */
+  .dark {
+    color-scheme: dark;
+
+    /* Paper surfaces invert: light becomes dark, dark ink becomes light.
+       Charcoal, brass and cream are already dark-mode-appropriate as they
+       stand (charcoal is a dark surface in both themes; brass and cream are
+       always used as light-on-dark accents), so they are left alone. */
+    --color-ivory: #17181a;
+    --color-ivory-2: #1d1f22;
+    --color-ivory-3: #35383c;
+
+    --color-ink: #ece7d9;
+    --color-ink-muted: #a7a196;
+
+    /* Was tuned dark enough for AA contrast against light paper; lightened
+       so it still reads against the now-dark paper. */
+    --color-brass-deep: #d4b876;
   }
 
   html {

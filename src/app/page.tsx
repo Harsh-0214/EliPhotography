@@ -1,6 +1,7 @@
 import { Hero } from "@/components/sections/hero";
 import { About } from "@/components/sections/about";
 import { RateCard } from "@/components/sections/rate-card";
+import { Reviews } from "@/components/sections/reviews";
 import { Contact } from "@/components/sections/contact";
 import { Chapter } from "@/components/gallery/chapter";
 import { ChapterTabs } from "@/components/gallery/chapter-tabs";
@@ -53,6 +54,7 @@ export default function HomePage() {
 
       <About portrait={portrait} standIn={standIn} />
       <RateCard />
+      <Reviews />
       <Contact />
     </>
   );
