@@ -45,7 +45,8 @@ export function PhotoFrame({
           alt={photo.caption}
           fill
           sizes={sizes}
-          className="object-cover transition-transform duration-700 ease-[var(--ease-shutter)] motion-safe:group-hover:scale-[1.035]"
+          quality={90}
+          className="object-contain transition-transform duration-700 ease-[var(--ease-shutter)] motion-safe:group-hover:scale-[1.035]"
         />
 
         <span

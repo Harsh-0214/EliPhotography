@@ -95,6 +95,30 @@
       "caption": "Just Peeking"
     },
     {
+      "src": "/images/gallery/baby/24-baby-crawling.JPG",
+      "width": 6000,
+      "height": 4000,
+      "id": "/images/gallery/baby/24-baby-crawling.JPG",
+      "category": "baby",
+      "caption": "Baby Crawling"
+    },
+    {
+      "src": "/images/gallery/baby/25-baby-in-stroller.JPG",
+      "width": 6000,
+      "height": 4000,
+      "id": "/images/gallery/baby/25-baby-in-stroller.JPG",
+      "category": "baby",
+      "caption": "Baby In Stroller"
+    },
+    {
+      "src": "/images/gallery/baby/36-toddler-smiling-closeup.JPG",
+      "width": 6000,
+      "height": 4000,
+      "id": "/images/gallery/baby/36-toddler-smiling-closeup.JPG",
+      "category": "baby",
+      "caption": "Toddler Smiling Closeup"
+    },
+    {
       "src": "/images/gallery/family/01-fast-asleep.JPG",
       "width": 6000,
       "height": 4000,
@@ -133,6 +157,14 @@
       "id": "/images/gallery/family/05-sunset-on-the-cliff.JPG",
       "category": "family",
       "caption": "Sunset On The Cliff"
+    },
+    {
+      "src": "/images/gallery/family/31-family-group-bridge.JPG",
+      "width": 6000,
+      "height": 4000,
+      "id": "/images/gallery/family/31-family-group-bridge.JPG",
+      "category": "family",
+      "caption": "Family Group Bridge"
     },
     {
       "src": "/images/gallery/portraits/01-the-violinist.JPG",

@@ -124,6 +124,7 @@ export function GalleryProvider({
                     alt={active.caption}
                     fill
                     sizes="100vw"
+                    quality={90}
                     className="object-contain"
                     priority
                   />
