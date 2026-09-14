@@ -30,7 +30,7 @@ export function About({
       className="bg-ivory"
     >
       <div className="grid lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1fr)]">
-        <ClipReveal className="relative aspect-[4/5] w-full lg:aspect-auto lg:min-h-[42rem]">
+        <ClipReveal className="relative order-2 aspect-[4/5] w-full lg:order-none lg:aspect-auto lg:min-h-[42rem]">
           {image ? (
             <Image
               src={image.src}
@@ -54,7 +54,7 @@ export function About({
           ) : null}
         </ClipReveal>
 
-        <div className="flex flex-col justify-center px-6 py-20 md:px-14 md:py-28 lg:px-20">
+        <div className="order-1 flex flex-col justify-center px-6 py-20 md:px-14 md:py-28 lg:order-none lg:px-20">
           <Reveal>
             <p className="kicker flex items-center gap-3 text-brass-deep">
               <span aria-hidden="true" className="h-px w-7 bg-brass-deep" />
