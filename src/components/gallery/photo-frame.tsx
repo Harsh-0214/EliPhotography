@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import Image from "next/image";
 import { motion, useReducedMotion } from "motion/react";
 import { useGallery } from "@/components/gallery/gallery-provider";
@@ -8,18 +9,21 @@ import { cn } from "@/lib/utils";
 import type { GalleryImage } from "@/lib/media";
 
 /**
- * One photograph in a collage block. The surrounding block sizes the frame;
- * this only fills it, opens the lightbox, and names itself on hover.
+ * One photograph in the gallery wall. Its box is sized to the photo's own
+ * aspect ratio (see Chapter), so `object-cover` here never actually crops —
+ * it just guards against the odd sub-pixel rounding gap.
  */
 export function PhotoFrame({
   photo,
   sizes,
   className,
+  style,
 }: {
   photo: GalleryImage;
   /** What share of the viewport this frame occupies, for srcset selection. */
   sizes: string;
   className?: string;
+  style?: CSSProperties;
 }) {
   const { open, indexOf, total } = useGallery();
   const reduceMotion = useReducedMotion();
@@ -27,6 +31,7 @@ export function PhotoFrame({
   return (
     <motion.figure
       className={cn("relative min-h-0 min-w-0", className)}
+      style={style}
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: "-4% 0px -4% 0px" }}
@@ -46,7 +51,7 @@ export function PhotoFrame({
           fill
           sizes={sizes}
           quality={90}
-          className="object-contain transition-transform duration-700 ease-[var(--ease-shutter)] motion-safe:group-hover:scale-[1.035]"
+          className="object-cover transition-transform duration-700 ease-[var(--ease-shutter)] motion-safe:group-hover:scale-[1.035]"
         />
 
         <span
