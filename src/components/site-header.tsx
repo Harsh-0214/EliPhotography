@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { Menu, X } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
@@ -15,6 +16,14 @@ import { EASE } from "@/components/motion/reveal";
 const SECTION_IDS = ["work", "about", "rates", "reviews", "contact"];
 
 export function SiteHeader({ logo }: { logo: SiteImage | null }) {
+  const pathname = usePathname();
+  const onHome = pathname === "/";
+  // The in-page anchors (#work etc.) only work as same-page jumps on the
+  // homepage itself — anywhere else they need the homepage path in front,
+  // or clicking them just appends the hash to the current URL and goes
+  // nowhere.
+  const homeAnchor = (hash: string) => (onHome ? hash : `/${hash}`);
+
   const [scrolled, setScrolled] = React.useState(false);
   const [active, setActive] = React.useState<string | null>(null);
   const [menuOpen, setMenuOpen] = React.useState(false);
@@ -79,7 +88,7 @@ export function SiteHeader({ logo }: { logo: SiteImage | null }) {
         {/* The masthead carries the logo at full size, so the header only
             claims it once you have scrolled past that. */}
         <a
-          href="#top"
+          href={homeAnchor("#top")}
           aria-label="Elish Modi Photography — back to top"
           aria-hidden={!scrolled}
           tabIndex={scrolled ? undefined : -1}
@@ -96,11 +105,11 @@ export function SiteHeader({ logo }: { logo: SiteImage | null }) {
         <nav aria-label="Primary" className="hidden items-center gap-9 md:flex">
           {nav.map((item) => {
             const id = item.href.slice(1);
-            const isActive = active === id;
+            const isActive = onHome && active === id;
             return (
               <a
                 key={item.href}
-                href={item.href}
+                href={homeAnchor(item.href)}
                 aria-current={isActive ? "true" : undefined}
                 className={cn(
                   "kicker group relative py-2 transition-[color] duration-200",
@@ -127,15 +136,22 @@ export function SiteHeader({ logo }: { logo: SiteImage | null }) {
           })}
           <Link
             href="/gallery"
+            aria-current={pathname === "/gallery" ? "true" : undefined}
             className={cn(
               "kicker relative py-2 transition-[color] duration-200",
-              scrolled ? "text-ink hover:text-brass-deep" : "text-cream hover:text-brass",
+              scrolled
+                ? pathname === "/gallery"
+                  ? "text-brass-deep"
+                  : "text-ink hover:text-brass-deep"
+                : pathname === "/gallery"
+                  ? "text-brass"
+                  : "text-cream hover:text-brass",
             )}
           >
             Gallery
           </Link>
           <Button asChild size="sm" variant={scrolled ? "solid" : "paper"}>
-            <a href="#contact">Book a session</a>
+            <a href={homeAnchor("#contact")}>Book a session</a>
           </Button>
           <ThemeToggle
             className={cn(
@@ -195,9 +211,9 @@ export function SiteHeader({ logo }: { logo: SiteImage | null }) {
               className="shell flex flex-1 flex-col justify-center gap-1 pb-24"
             >
               {[
-                ...nav,
+                ...nav.map((item) => ({ label: item.label, href: homeAnchor(item.href) })),
                 { label: "Gallery", href: "/gallery" },
-                { label: "Contact", href: "#contact" },
+                { label: "Contact", href: homeAnchor("#contact") },
               ].map((item, index) => (
                 <motion.a
                   key={item.href}
@@ -228,7 +244,7 @@ export function SiteHeader({ logo }: { logo: SiteImage | null }) {
                   className="w-full"
                   onClick={() => setMenuOpen(false)}
                 >
-                  <a href="#contact">Book a session</a>
+                  <a href={homeAnchor("#contact")}>Book a session</a>
                 </Button>
               </motion.div>
             </nav>

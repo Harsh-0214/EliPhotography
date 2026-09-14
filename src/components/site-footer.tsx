@@ -1,9 +1,15 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import { Logo } from "@/components/brand/logo";
 import { ApertureDivider } from "@/components/brand/aperture";
 import type { SiteImage } from "@/lib/media";
 import { nav, site } from "@/lib/site";
 
 export function SiteFooter({ logo }: { logo: SiteImage | null }) {
+  const onHome = usePathname() === "/";
+  const homeAnchor = (hash: string) => (onHome ? hash : `/${hash}`);
+
   return (
     <footer className="on-charcoal bg-charcoal-2 text-cream">
       <div className="shell flex flex-col items-center py-16 text-center md:py-20">
@@ -22,7 +28,10 @@ export function SiteFooter({ logo }: { logo: SiteImage | null }) {
           aria-label="Footer"
           className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3"
         >
-          {[...nav, { label: "Contact", href: "#contact" }].map((item) => (
+          {[
+            ...nav.map((item) => ({ label: item.label, href: homeAnchor(item.href) })),
+            { label: "Contact", href: homeAnchor("#contact") },
+          ].map((item) => (
             <a
               key={item.href}
               href={item.href}
