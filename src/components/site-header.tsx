@@ -11,7 +11,7 @@ import type { SiteImage } from "@/lib/media";
 import { nav } from "@/lib/site";
 import { EASE } from "@/components/motion/reveal";
 
-const SECTION_IDS = ["about", "rates", "work", "contact"];
+const SECTION_IDS = ["work", "about", "rates", "reviews", "contact"];
 
 export function SiteHeader({ logo }: { logo: SiteImage | null }) {
   const [scrolled, setScrolled] = React.useState(false);
@@ -124,15 +124,15 @@ export function SiteHeader({ logo }: { logo: SiteImage | null }) {
               </a>
             );
           })}
+          <Button asChild size="sm" variant={scrolled ? "solid" : "paper"}>
+            <a href="#contact">Book a session</a>
+          </Button>
           <ThemeToggle
             className={cn(
               "-mr-1",
               scrolled ? "text-ink hover:text-brass-deep" : "text-cream hover:text-brass",
             )}
           />
-          <Button asChild size="sm" variant={scrolled ? "solid" : "paper"}>
-            <a href="#contact">Book a session</a>
-          </Button>
         </nav>
 
         <button

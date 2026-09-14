@@ -18,9 +18,10 @@ export const site = {
 } as const;
 
 export const nav = [
+  { label: "Work", href: "#work" },
   { label: "About", href: "#about" },
   { label: "Rates", href: "#rates" },
-  { label: "Work", href: "#work" },
+  { label: "Reviews", href: "#reviews" },
 ] as const;
 
 export type Service = {
