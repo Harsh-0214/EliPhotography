@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { Menu, X } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
@@ -124,6 +125,15 @@ export function SiteHeader({ logo }: { logo: SiteImage | null }) {
               </a>
             );
           })}
+          <Link
+            href="/gallery"
+            className={cn(
+              "kicker relative py-2 transition-[color] duration-200",
+              scrolled ? "text-ink hover:text-brass-deep" : "text-cream hover:text-brass",
+            )}
+          >
+            Gallery
+          </Link>
           <Button asChild size="sm" variant={scrolled ? "solid" : "paper"}>
             <a href="#contact">Book a session</a>
           </Button>
@@ -184,25 +194,27 @@ export function SiteHeader({ logo }: { logo: SiteImage | null }) {
               aria-label="Primary"
               className="shell flex flex-1 flex-col justify-center gap-1 pb-24"
             >
-              {[...nav, { label: "Contact", href: "#contact" }].map(
-                (item, index) => (
-                  <motion.a
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setMenuOpen(false)}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      duration: 0.4,
-                      delay: 0.06 + index * 0.05,
-                      ease: EASE,
-                    }}
-                    className="display border-b border-ivory-3 py-5 text-[2.25rem] text-ink transition-[color] duration-200 active:text-brass-deep"
-                  >
-                    {item.label}
-                  </motion.a>
-                ),
-              )}
+              {[
+                ...nav,
+                { label: "Gallery", href: "/gallery" },
+                { label: "Contact", href: "#contact" },
+              ].map((item, index) => (
+                <motion.a
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMenuOpen(false)}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.4,
+                    delay: 0.06 + index * 0.05,
+                    ease: EASE,
+                  }}
+                  className="display border-b border-ivory-3 py-5 text-[2.25rem] text-ink transition-[color] duration-200 active:text-brass-deep"
+                >
+                  {item.label}
+                </motion.a>
+              ))}
 
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
