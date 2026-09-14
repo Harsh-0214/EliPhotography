@@ -62,9 +62,11 @@ export function ChapterCard({
         </p>
       </div>
 
-      {/* Holds the column open on the taller chapters without leaving the
-          space looking accidental. */}
-      <div className="flex flex-1 items-center py-8">
+      {/* A fixed breath between the blurb and the facts below — no longer a
+          flex-1 spacer, so the card's own height is just its content's, and
+          doesn't force a category with only a few photos to look taller than
+          its photo wall. */}
+      <div className="py-8">
         <ApertureMark
           className="h-7 w-7 text-brass-deep/30 md:h-8 md:w-8"
           strokeWidth={3}

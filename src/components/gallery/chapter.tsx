@@ -1,3 +1,6 @@
+"use client";
+
+import * as React from "react";
 import { ChapterCard } from "@/components/gallery/chapter-card";
 import { PhotoWall } from "@/components/gallery/photo-wall";
 import type { GalleryImage } from "@/lib/media";
@@ -32,6 +35,23 @@ export function Chapter({
   cta: string;
   photos: GalleryImage[];
 }) {
+  const sidebarRef = React.useRef<HTMLDivElement>(null);
+  const [sidebarHeight, setSidebarHeight] = React.useState(0);
+
+  React.useEffect(() => {
+    const element = sidebarRef.current;
+    if (!element) return;
+
+    // Measures only the card's own column — never the photo wall — so this
+    // stays a fixed, independent target for PhotoWall to fill and can't
+    // feed back into itself.
+    const observer = new ResizeObserver(([entry]) => {
+      if (entry) setSidebarHeight(entry.contentRect.height);
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
   if (photos.length === 0) return null;
 
   return (
@@ -41,9 +61,16 @@ export function Chapter({
       className={`flex flex-col bg-charcoal ${GAP} md:flex-row md:items-start`}
     >
       {/* self-stretch gives the column the full height of the section, which
-          is what the sticky panel inside it needs to travel against. */}
+          is what the sticky panel inside it needs to travel against. Its own
+          height is capped at one viewport OR the section's real height,
+          whichever is smaller — so a short category (few photos) doesn't
+          force the whole section tall just to match a fixed viewport figure,
+          leaving bare charcoal under a wall shorter than that. */}
       <div className="md:w-[36%] md:shrink-0 md:self-stretch lg:w-[32%]">
-        <div className="md:sticky md:top-[9rem] md:h-[calc(100svh-9rem)]">
+        <div
+          ref={sidebarRef}
+          className="md:sticky md:top-[9rem] md:h-[min(100svh-9rem,100%)]"
+        >
           <ChapterCard
             slug={slug}
             label={label}
@@ -55,7 +82,7 @@ export function Chapter({
         </div>
       </div>
 
-      <PhotoWall photos={photos} />
+      <PhotoWall photos={photos} fillHeight={sidebarHeight} />
     </section>
   );
 }

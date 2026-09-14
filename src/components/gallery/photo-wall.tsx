@@ -16,6 +16,10 @@ function targetHeight(containerWidth: number) {
   return 230;
 }
 
+function totalHeight(rows: { height: number }[][], gap: number) {
+  return rows.reduce((sum, row) => sum + (row[0]?.height ?? 0), 0) + gap * Math.max(rows.length - 1, 0);
+}
+
 /**
  * A justified wall of photographs: every photo keeps its real aspect ratio
  * (no crop, no letterboxing) while each row is scaled to exactly fill the
@@ -23,7 +27,17 @@ function targetHeight(containerWidth: number) {
  * container's real pixel width, which depends on the sticky sidebar's
  * rendered size, so this measures itself after mount rather than guessing.
  */
-export function PhotoWall({ photos }: { photos: GalleryImage[] }) {
+export function PhotoWall({
+  photos,
+  fillHeight = 0,
+}: {
+  photos: GalleryImage[];
+  /** The sidebar card's measured height (desktop only). When it's taller
+   * than the wall's own natural rows, the leftover is spread evenly as
+   * breathing room between rows — rather than stretched into the photos
+   * themselves — so no bare background collects in one block. */
+  fillHeight?: number;
+}) {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [width, setWidth] = React.useState(0);
 
@@ -39,9 +53,14 @@ export function PhotoWall({ photos }: { photos: GalleryImage[] }) {
   }, []);
 
   const rows = justifyRows(photos, width, targetHeight(width), GAP_PX);
+  const shouldFill = width >= 768 && fillHeight > totalHeight(rows, GAP_PX);
 
   return (
-    <div ref={containerRef} className={`flex min-w-0 flex-1 flex-col ${GAP_CLASS}`}>
+    <div
+      ref={containerRef}
+      className={`flex min-w-0 flex-1 flex-col ${GAP_CLASS}`}
+      style={shouldFill ? { height: fillHeight, justifyContent: "space-evenly" } : undefined}
+    >
       {rows.map((row, index) => (
         <div key={index} className={`flex ${GAP_CLASS}`}>
           {row.map(({ photo, width: tileWidth, height: tileHeight }) => (
