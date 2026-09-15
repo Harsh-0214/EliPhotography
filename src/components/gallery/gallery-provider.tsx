@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import { ArrowLeft, ArrowRight, X } from "lucide-react";
+import { ProtectedImage } from "@/components/media/protected-image";
 import {
   Dialog,
   DialogContent,
@@ -133,7 +133,7 @@ export function GalleryProvider({
                 {/* `fill` measures the border box, so the padding needs its
                     own positioned wrapper or the photo runs to the edges. */}
                 <div className="relative h-full w-full">
-                  <Image
+                  <ProtectedImage
                     key={active.id}
                     src={active.src}
                     alt={active.caption}

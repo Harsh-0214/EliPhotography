@@ -1,10 +1,10 @@
-import Image from "next/image";
 import { Logo } from "@/components/brand/logo";
 import { ApertureDivider } from "@/components/brand/aperture";
 import { ApertureReveal } from "@/components/aperture-reveal";
 import { Plate } from "@/components/brand/plate";
 import { Button } from "@/components/ui/button";
 import { HeroIntro } from "@/components/sections/hero-intro";
+import { ProtectedImage } from "@/components/media/protected-image";
 import type { SiteImage } from "@/lib/media";
 
 /**
@@ -20,7 +20,7 @@ export function Hero({ photo }: { photo: SiteImage | null }) {
     >
       <ApertureReveal className="absolute inset-0">
         {photo ? (
-          <Image
+          <ProtectedImage
             src={photo.src}
             alt="A photograph by Elish Modi"
             fill

@@ -1,8 +1,8 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import Image from "next/image";
 import { motion, useReducedMotion } from "motion/react";
+import { ProtectedImage } from "@/components/media/protected-image";
 import { useGallery } from "@/components/gallery/gallery-provider";
 import { EASE } from "@/components/motion/reveal";
 import { cn } from "@/lib/utils";
@@ -45,7 +45,7 @@ export function PhotoFrame({
         } of ${total}`}
         className="group absolute inset-0 block h-full w-full cursor-pointer overflow-hidden bg-charcoal-2"
       >
-        <Image
+        <ProtectedImage
           src={photo.src}
           alt={photo.caption}
           fill

@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { ProtectedImage } from "@/components/media/protected-image";
 import { GalleryProvider, useGallery } from "@/components/gallery/gallery-provider";
 import MasonryGrid from "@/components/ui/masonry-grid";
 import { categories, type CategorySlug } from "@/lib/site";
@@ -79,7 +79,7 @@ function GalleryTile({ photo }: { photo: GalleryImage }) {
       aria-label={`Open ${photo.caption} full size — photograph ${indexOf(photo.id) + 1} of ${total}`}
       className="group relative block w-full cursor-pointer overflow-hidden rounded-lg bg-charcoal-2 shadow-md transition-shadow duration-300 ease-in-out hover:shadow-xl hover:shadow-black/40"
     >
-      <Image
+      <ProtectedImage
         src={photo.src}
         alt={photo.caption}
         width={photo.width}

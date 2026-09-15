@@ -1,13 +1,13 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import { motion } from "motion/react";
 import { ArrowRight, X } from "lucide-react";
 import { SectionHeading } from "@/components/section-heading";
 import { staggerChild, StaggerGroup } from "@/components/motion/reveal";
 import { ApertureMark } from "@/components/brand/aperture";
 import { GalleryProvider, useGallery } from "@/components/gallery/gallery-provider";
+import { ProtectedImage } from "@/components/media/protected-image";
 import {
   Dialog,
   DialogContent,
@@ -52,7 +52,7 @@ function AlbumTile({ photo }: { photo: AlbumImage }) {
       aria-label={`Open photograph ${indexOf(photo.id) + 1} of ${total} full size`}
       className="group relative block w-full cursor-pointer overflow-hidden rounded-lg bg-charcoal-3 shadow-md transition-shadow duration-300 ease-in-out hover:shadow-xl hover:shadow-black/40"
     >
-      <Image
+      <ProtectedImage
         src={photo.src}
         alt={photo.caption}
         width={photo.width}

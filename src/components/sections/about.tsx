@@ -1,8 +1,8 @@
-import Image from "next/image";
 import { ClipReveal } from "@/components/motion/clip-reveal";
 import { Reveal } from "@/components/motion/reveal";
 import { ApertureMark } from "@/components/brand/aperture";
 import { Plate } from "@/components/brand/plate";
+import { ProtectedImage } from "@/components/media/protected-image";
 import type { GalleryImage, SiteImage } from "@/lib/media";
 import { site } from "@/lib/site";
 
@@ -32,7 +32,7 @@ export function About({
       <div className="grid lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1fr)]">
         <ClipReveal className="relative order-2 aspect-[4/5] w-full lg:order-none lg:aspect-auto lg:min-h-[42rem]">
           {image ? (
-            <Image
+            <ProtectedImage
               src={image.src}
               alt={
                 isPortraitOfElish

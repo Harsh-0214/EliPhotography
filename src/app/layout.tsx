@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Marcellus, Jost } from "next/font/google";
+import { headers } from "next/headers";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -61,10 +62,11 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const logo = getLogo();
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
 
   return (
     <html
@@ -73,6 +75,7 @@ export default function RootLayout({
     >
       <body className="flex min-h-full flex-col bg-ivory">
         <script
+          nonce={nonce}
           // Runs before hydration so the correct theme is set before first
           // paint — otherwise the page would flash light before switching.
           dangerouslySetInnerHTML={{
