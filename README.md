@@ -129,13 +129,24 @@ and the booking form together.
 
 ### Wiring up the form
 
-The booking form validates on the server and shows a confirmation, but **it does
-not send anything yet**. Enquiries are written to the server log only.
+The booking form validates on the server and emails the enquiry via
+[Resend](https://resend.com) (`src/app/actions.ts`). It needs one environment
+variable to actually send anything:
 
-To connect it, open `src/app/actions.ts` and replace the `console.info` call
-(marked `TODO(client)`) with a call to an email provider — Resend, Postmark, or a
-form service like Formspree. The enquiry object is already validated and typed at
-that point.
+1. Create a free Resend account and copy an API key from the dashboard.
+2. Set `RESEND_API_KEY` — locally, copy `.env.example` to `.env.local` and
+   paste it in; in production, add it in your host's environment variables
+   (e.g. Vercel → Project → Settings → Environment Variables).
+3. Without `RESEND_API_KEY` set, the form still validates and shows the same
+   confirmation, but the enquiry is only written to the server log — useful
+   for local dev without a key, but **not what you want in production**.
+
+Optionally set `BOOKING_FROM_EMAIL` too, once you've verified a sending
+domain in Resend (Resend → Domains) — otherwise enquiries send from Resend's
+shared `onboarding@resend.dev` address, which works immediately but is worth
+swapping out once you have a real domain wired up. Emails always go to
+`site.email` in `src/lib/site.ts`, with the sender's own address set as
+reply-to, so replying goes straight back to them.
 
 ---
 

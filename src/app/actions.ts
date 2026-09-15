@@ -1,10 +1,16 @@
 "use server";
 
-import { services } from "@/lib/site";
+import { Resend } from "resend";
+import { services, site } from "@/lib/site";
 import type { BookingField, BookingState } from "@/lib/booking";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const VALID_SHOOT_TYPES = new Set(services.map((service) => service.slug));
+
+/** Null in any environment without a key (e.g. local dev) — the enquiry is
+ * still logged in that case, just not emailed. See README → "Wiring up the
+ * form". */
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 export async function submitBooking(
   _previous: BookingState,
@@ -50,10 +56,38 @@ export async function submitBooking(
     return { status: "error", errors };
   }
 
-  /* TODO(client): connect a delivery provider here — Resend, Postmark or a
-     form service. Until then the enquiry is only written to the server log,
-     so nothing is emailed to anyone. See README.md → "Wiring up the form". */
-  console.info("[booking enquiry]", enquiry);
+  const shootName = services.find((s) => s.slug === enquiry.shootType)?.name ?? enquiry.shootType;
+
+  if (resend) {
+    const { error } = await resend.emails.send({
+      from: process.env.BOOKING_FROM_EMAIL ?? "Elish Modi Photography <onboarding@resend.dev>",
+      to: site.email,
+      replyTo: enquiry.email,
+      subject: `New enquiry: ${shootName} — ${enquiry.name}`,
+      text: [
+        `Name: ${enquiry.name}`,
+        `Email: ${enquiry.email}`,
+        `Shoot type: ${shootName}`,
+        `Preferred date: ${enquiry.date || "Not specified"}`,
+        "",
+        enquiry.message,
+      ].join("\n"),
+    });
+
+    // A delivery hiccup shouldn't strand the person who just filled out the
+    // form — they've done everything right, and site.email/phone are on
+    // screen as a backup. Log loudly so it's caught from the hosting
+    // provider's function logs, and keep the enquiry itself recoverable.
+    if (error) {
+      console.error("[booking enquiry] Resend send failed", error);
+      console.info("[booking enquiry]", enquiry);
+    }
+  } else {
+    console.warn(
+      "[booking enquiry] RESEND_API_KEY is not set — enquiry logged only, not emailed. See README → \"Wiring up the form\".",
+    );
+    console.info("[booking enquiry]", enquiry);
+  }
 
   return { status: "success", errors: {} };
 }
