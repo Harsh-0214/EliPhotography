@@ -25,11 +25,19 @@ export type GalleryImage = SiteImage & {
   caption: string;
 };
 
+/** A one-off album (e.g. a client review's photos) — not tied to one of the
+ * fixed gallery categories, so no `category` field. */
+export type AlbumImage = SiteImage & {
+  id: string;
+  caption: string;
+};
+
 type MediaManifest = {
   logo: SiteImage | null;
   hero: SiteImage | null;
   about: SiteImage | null;
   gallery: GalleryImage[];
+  reviewAlbums: Record<string, AlbumImage[]>;
 };
 
 const media = manifest as MediaManifest;
@@ -59,4 +67,13 @@ export function getAboutImage(): SiteImage | null {
  */
 export function getGalleryImages(): GalleryImage[] {
   return media.gallery;
+}
+
+/**
+ * A review's own photo album: /public/images/reviews/<slug>. Returns an
+ * empty array until photos are added — callers should hide the "view
+ * album" link rather than show one that opens nothing.
+ */
+export function getReviewAlbum(slug: string): AlbumImage[] {
+  return media.reviewAlbums[slug] ?? [];
 }

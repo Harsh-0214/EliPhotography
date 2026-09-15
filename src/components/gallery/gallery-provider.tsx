@@ -10,13 +10,22 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { categories } from "@/lib/site";
-import type { GalleryImage } from "@/lib/media";
+import type { SiteImage } from "@/lib/media";
 
 /**
  * Holds the full collection so any photograph anywhere on the page can open
  * the lightbox, and so the arrow keys walk the whole body of work rather
  * than stopping at the end of a chapter.
  */
+
+/** The minimum shape the lightbox needs — a `GalleryImage` (with a fixed
+ * `category`) satisfies this, but so does a one-off album's `AlbumImage`
+ * (no category), which relies on the `title` prop below instead. */
+type LightboxPhoto = SiteImage & {
+  id: string;
+  caption: string;
+  category?: string;
+};
 
 type GalleryContextValue = {
   open: (id: string) => void;
@@ -32,9 +41,14 @@ const labelFor = (slug: string) =>
 export function GalleryProvider({
   photos,
   children,
+  title,
 }: {
-  photos: GalleryImage[];
+  photos: LightboxPhoto[];
   children: React.ReactNode;
+  /** Overrides the per-photo category label in the lightbox header — for a
+   * one-off album not tied to the fixed category list (e.g. a review's own
+   * photos), where there's no `category` to look up. */
+  title?: string;
 }) {
   const [openIndex, setOpenIndex] = React.useState<number | null>(null);
 
@@ -77,6 +91,7 @@ export function GalleryProvider({
   );
 
   const active = openIndex === null ? null : photos[openIndex];
+  const headerLabel = title ?? (active?.category ? labelFor(active.category) : undefined);
 
   return (
     <GalleryContext.Provider value={value}>
@@ -91,14 +106,14 @@ export function GalleryProvider({
             <>
               <DialogTitle className="sr-only">{active.caption}</DialogTitle>
               <DialogDescription className="sr-only">
-                {labelFor(active.category)}, photograph {openIndex! + 1} of{" "}
-                {photos.length}. Use the left and right arrow keys to move
-                between photographs.
+                {headerLabel ? `${headerLabel}, ` : ""}photograph{" "}
+                {openIndex! + 1} of {photos.length}. Use the left and right
+                arrow keys to move between photographs.
               </DialogDescription>
 
               <div className="flex items-center justify-between gap-4 px-5 py-4 md:px-8">
                 <p className="kicker-sm text-brass">
-                  {labelFor(active.category)}
+                  {headerLabel}
                   <span className="ml-3 text-paper-muted">
                     {String(openIndex! + 1).padStart(2, "0")} /{" "}
                     {String(photos.length).padStart(2, "0")}

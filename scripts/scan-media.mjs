@@ -151,7 +151,36 @@ async function scanGallery() {
   return images;
 }
 
+/**
+ * One-off photo albums for the homepage's client reviews — each review gets
+ * its own folder under /public/images/reviews/<slug>, unrelated to the six
+ * fixed gallery categories above. Unlike `CATEGORIES`, there's no fixed
+ * slug list to keep in sync: whatever folders exist here become albums.
+ */
+async function scanReviewAlbums() {
+  const dir = path.join(PUBLIC_DIR, "images", "reviews");
+  if (!fs.existsSync(dir)) return {};
+
+  const slugs = fs
+    .readdirSync(dir, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name);
+
+  const albums = {};
+  for (const slug of slugs) {
+    const images = [];
+    for (const name of listImageFiles(path.join("images", "reviews", slug))) {
+      const measured = await measure(path.join("images", "reviews", slug, name));
+      if (!measured) continue;
+      images.push({ ...measured, id: measured.src, caption: toCaption(name) });
+    }
+    albums[slug] = images;
+  }
+  return albums;
+}
+
 const gallery = await scanGallery();
+const reviewAlbums = await scanReviewAlbums();
 
 const manifest = {
   logo: await findNamed("logo", "elish-modi-logo"),
@@ -161,15 +190,22 @@ const manifest = {
      a real portrait is supplied. */
   about: await findNamed("images", "about"),
   gallery,
+  reviewAlbums,
 };
 
 fs.mkdirSync(path.dirname(OUTPUT), { recursive: true });
 fs.writeFileSync(OUTPUT, `${JSON.stringify(manifest, null, 2)}\n`);
+
+const reviewAlbumCount = Object.keys(manifest.reviewAlbums).length;
+const reviewPhotoCount = Object.values(manifest.reviewAlbums).reduce(
+  (sum, photos) => sum + photos.length,
+  0,
+);
 
 console.log(
   `[media] logo: ${manifest.logo ? "found" : "none"} · hero: ${
     manifest.hero ? "found" : "none"
   } · portrait: ${manifest.about ? "found" : "none"} · gallery: ${
     manifest.gallery.length
-  } photo(s)`,
+  } photo(s) · review albums: ${reviewAlbumCount} (${reviewPhotoCount} photo(s))`,
 );
