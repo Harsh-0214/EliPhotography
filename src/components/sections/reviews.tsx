@@ -1,12 +1,21 @@
 "use client";
 
+import * as React from "react";
+import Image from "next/image";
 import { motion } from "motion/react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, X } from "lucide-react";
 import { SectionHeading } from "@/components/section-heading";
 import { staggerChild, StaggerGroup } from "@/components/motion/reveal";
 import { ApertureMark } from "@/components/brand/aperture";
 import { GalleryProvider, useGallery } from "@/components/gallery/gallery-provider";
-import { getReviewAlbum } from "@/lib/media";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import MasonryGrid from "@/components/ui/masonry-grid";
+import { getReviewAlbum, type AlbumImage } from "@/lib/media";
 
 type Testimonial = {
   quote: string;
@@ -34,12 +43,90 @@ const testimonials: Testimonial[] = [
   },
 ];
 
-function ViewAlbumButton({ firstPhotoId }: { firstPhotoId: string }) {
-  const { open } = useGallery();
+function AlbumTile({ photo }: { photo: AlbumImage }) {
+  const { open, indexOf, total } = useGallery();
   return (
     <button
       type="button"
-      onClick={() => open(firstPhotoId)}
+      onClick={() => open(photo.id)}
+      aria-label={`Open photograph ${indexOf(photo.id) + 1} of ${total} full size`}
+      className="group relative block w-full cursor-pointer overflow-hidden rounded-lg bg-charcoal-3 shadow-md transition-shadow duration-300 ease-in-out hover:shadow-xl hover:shadow-black/40"
+    >
+      <Image
+        src={photo.src}
+        alt={photo.caption}
+        width={photo.width}
+        height={photo.height}
+        sizes="(max-width: 639px) 100vw, (max-width: 767px) 50vw, 33vw"
+        quality={90}
+        className="h-auto w-full"
+      />
+    </button>
+  );
+}
+
+/**
+ * The grid a review's "View album" button opens: every photo in the
+ * session at once, in the same justified/masonry language as the main
+ * /gallery page. Picking a photo here opens the single-photo lightbox
+ * (GalleryProvider's own Dialog, stacked on top) for one-by-one viewing.
+ */
+function AlbumDialog({
+  photos,
+  title,
+  open,
+  onOpenChange,
+}: {
+  photos: AlbumImage[];
+  title: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="bg-charcoal" aria-describedby={undefined}>
+        <DialogTitle className="sr-only">{title} — photo album</DialogTitle>
+        <DialogDescription className="sr-only">
+          {photos.length} photograph{photos.length === 1 ? "" : "s"}. Select one to
+          view it full size.
+        </DialogDescription>
+
+        <div className="flex items-center justify-between gap-4 border-b border-charcoal-3 px-5 py-5 md:px-10">
+          <div>
+            <p className="kicker-sm text-paper-muted">Photo Album</p>
+            <h3 className="display mt-1 text-[1.75rem] text-brass md:text-[2.25rem]">
+              {title}
+            </h3>
+          </div>
+          <button
+            type="button"
+            onClick={() => onOpenChange(false)}
+            aria-label="Close album"
+            className="-mr-2 flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center text-paper-muted transition-[color,transform] duration-150 ease-[var(--ease-shutter)] hover:text-cream active:scale-[0.94]"
+          >
+            <X aria-hidden="true" className="h-5 w-5" strokeWidth={1.5} />
+          </button>
+        </div>
+
+        <div className="min-h-0 flex-1 overflow-y-auto px-5 py-8 md:px-10">
+          <MasonryGrid
+            items={photos}
+            getKey={(photo) => photo.id}
+            className="columns-1 gap-4 sm:columns-2 lg:columns-3"
+            gap="1rem"
+            renderItem={(photo) => <AlbumTile photo={photo} />}
+          />
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function ViewAlbumButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
       className="kicker group mt-6 inline-flex cursor-pointer items-center gap-2.5 self-start text-brass transition-[color,transform] duration-200 ease-[var(--ease-shutter)] hover:text-cream active:scale-[0.97]"
     >
       View album
@@ -54,6 +141,7 @@ function ViewAlbumButton({ firstPhotoId }: { firstPhotoId: string }) {
 
 function ReviewCard({ testimonial }: { testimonial: Testimonial }) {
   const album = getReviewAlbum(testimonial.slug);
+  const [albumOpen, setAlbumOpen] = React.useState(false);
 
   const card = (
     <motion.li
@@ -69,7 +157,9 @@ function ReviewCard({ testimonial }: { testimonial: Testimonial }) {
           {testimonial.name}
           <span className="ml-2.5 text-paper-muted">{testimonial.date}</span>
         </figcaption>
-        {album.length > 0 ? <ViewAlbumButton firstPhotoId={album[0].id} /> : null}
+        {album.length > 0 ? (
+          <ViewAlbumButton onClick={() => setAlbumOpen(true)} />
+        ) : null}
       </figure>
     </motion.li>
   );
@@ -79,6 +169,12 @@ function ReviewCard({ testimonial }: { testimonial: Testimonial }) {
   return album.length > 0 ? (
     <GalleryProvider photos={album} title={testimonial.name}>
       {card}
+      <AlbumDialog
+        photos={album}
+        title={testimonial.name}
+        open={albumOpen}
+        onOpenChange={setAlbumOpen}
+      />
     </GalleryProvider>
   ) : (
     card
