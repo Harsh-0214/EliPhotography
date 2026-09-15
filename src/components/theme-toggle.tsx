@@ -8,6 +8,12 @@ const STORAGE_KEY = "theme";
 
 function applyTheme(dark: boolean) {
   document.documentElement.classList.toggle("dark", dark);
+  // Keeps the mobile browser chrome (status bar tint) matching the theme —
+  // this is a manual toggle, not `prefers-color-scheme`, so only JS can
+  // track it; see the matching inline script in layout.tsx for first paint.
+  document
+    .querySelector('meta[name="theme-color"]')
+    ?.setAttribute("content", dark ? "#17181a" : "#f3efe1");
 }
 
 export function ThemeToggle({ className }: { className?: string }) {
