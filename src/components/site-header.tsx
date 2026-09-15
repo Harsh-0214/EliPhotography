@@ -80,7 +80,17 @@ export function SiteHeader({ logo }: { logo: SiteImage | null }) {
         "fixed inset-x-0 top-0 z-40 h-[5.5rem] transition-[background-color,box-shadow,border-color] duration-300 ease-[var(--ease-shutter)]",
         // Over the opening frame the bar is glass; once past it, paper.
         scrolled
-          ? "border-b border-ivory-3 bg-ivory/92 backdrop-blur-md"
+          ? cn(
+              "border-b border-ivory-3 bg-ivory/92",
+              // backdrop-filter creates a new CSS containing block for any
+              // `position: fixed` descendant — including the mobile menu
+              // panel below, whose own `fixed inset-0` would then resolve
+              // against this 5.5rem-tall header instead of the viewport,
+              // confining it to a thin strip. Drop the blur while the menu
+              // is open; the header is fully covered by the menu then
+              // anyway; so there's nothing lost.
+              !menuOpen && "backdrop-blur-md",
+            )
           : "on-charcoal border-b border-transparent bg-transparent",
       )}
     >
@@ -182,7 +192,13 @@ export function SiteHeader({ logo }: { logo: SiteImage | null }) {
             role="dialog"
             aria-modal="true"
             aria-label="Menu"
-            initial={{ opacity: 0 }}
+            // Only the panel's own solid background must never fade — a
+            // 220ms opacity animation on it briefly makes bg-ivory see-
+            // through, showing whatever section is scrolled behind it. The
+            // nav links below already fade/slide in on their own, so the
+            // menu still feels animated; it just opens onto an immediately
+            // solid backdrop rather than a momentarily transparent one.
+            initial={{ opacity: 1 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.22, ease: EASE }}
