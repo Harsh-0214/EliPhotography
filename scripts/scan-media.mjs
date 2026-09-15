@@ -20,6 +20,14 @@ const OUTPUT = path.join(ROOT, "src", "lib", "media-manifest.json");
 
 const IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp", ".avif"];
 
+/** iPhones save photos as HEIC by default. Almost no browser besides Safari
+ * renders it, so any .heic/.heif dropped under /public/images is converted
+ * to a same-named .jpg (and removed) before anything else runs — uploads
+ * "just work" without anyone remembering to convert them first. */
+const HEIC_EXTENSIONS = [".heic", ".heif"];
+const HEIC_MAX_EDGE = 3600;
+const HEIC_QUALITY = 85;
+
 /** Must stay in step with `categories` in src/lib/site.ts. */
 const CATEGORIES = [
   "baby",
@@ -107,6 +115,60 @@ function listImageFiles(dir) {
     .sort((a, b) => a.localeCompare(b, "en", { numeric: true }));
 }
 
+/**
+ * Recursively walks a directory converting any .heic/.heif file to a
+ * same-named .jpg (resized/compressed the same way the rest of the gallery
+ * is), then removes the original — so the normal extension-based scanning
+ * below just finds a .jpg like any other upload.
+ */
+async function convertHeicFiles(dir) {
+  if (!fs.existsSync(dir)) return;
+
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      await convertHeicFiles(full);
+      continue;
+    }
+
+    const ext = path.extname(entry.name).toLowerCase();
+    if (!HEIC_EXTENSIONS.includes(ext)) continue;
+
+    const jpgPath = `${full.slice(0, -ext.length)}.jpg`;
+    if (fs.existsSync(jpgPath)) {
+      // Already converted on a previous run — just drop the source.
+      fs.unlinkSync(full);
+      continue;
+    }
+
+    try {
+      await sharp(full, { failOn: "none" })
+        .rotate() // bakes in EXIF orientation, matching measure()'s own handling
+        .resize({
+          width: HEIC_MAX_EDGE,
+          height: HEIC_MAX_EDGE,
+          fit: "inside",
+          withoutEnlargement: true,
+        })
+        .jpeg({ quality: HEIC_QUALITY, mozjpeg: true })
+        .toFile(jpgPath);
+      fs.unlinkSync(full);
+      console.log(`[media] converted ${path.relative(PUBLIC_DIR, full)} -> .jpg`);
+    } catch (error) {
+      // sharp's bundled libheif can read basic HEIC metadata but can't
+      // decode pixel data for some iPhone variants (Live Photos, portrait
+      // depth tracks) — there's no pure-JS fallback for those, so the file
+      // is left in place and skipped by the extension-based scan below.
+      console.warn(
+        `[media] could not convert ${path.relative(PUBLIC_DIR, full)}: ${error.message}\n` +
+          `[media]   this HEIC photo won't appear on the site — re-export it as JPEG ` +
+          `(on iPhone: Settings > Camera > Formats > Most Compatible, or share it to ` +
+          `yourself with "Automatic" conversion) and re-upload.`,
+      );
+    }
+  }
+}
+
 function toCaption(filename) {
   return filename
     .replace(/\.[^.]+$/, "")
@@ -178,6 +240,8 @@ async function scanReviewAlbums() {
   }
   return albums;
 }
+
+await convertHeicFiles(path.join(PUBLIC_DIR, "images"));
 
 const gallery = await scanGallery();
 const reviewAlbums = await scanReviewAlbums();
